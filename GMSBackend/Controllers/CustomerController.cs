@@ -2,6 +2,7 @@
 using GMSBackend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace GMSBackend.Controllers
             _dBRepository = dBRepository;
         }
 
-        [HttpPost("addcustomer")]
+        [HttpPost("addCustomer")]
         [Authorize]
         public ActionResult AddCustomer([FromBody] Account request)
         {
@@ -42,5 +43,30 @@ namespace GMSBackend.Controllers
 
             return Ok(request);
         }
+
+
+        [HttpGet("getJobInfos")]
+        [Authorize]
+        public List<JobInfo> GetJobInfos()
+        {
+            return _dBRepository.JobInfos.AsNoTracking().ToList();
+        }
+
+        [HttpGet("getMembershipJoinTypes")]
+        [Authorize]
+        public List<MembershipJoinType> GetMembershipJoinTypes()
+        {
+            return _dBRepository.MembershipJoinTypes.AsNoTracking().ToList();
+        }
+
+
+        [HttpGet("getCustomers")]
+        [Authorize]
+        public List<Account> GetCustomers()
+        {
+            return _dBRepository.Accounts.Where(l => l.AccountTypeId == 1).AsNoTracking().ToList();
+        }
+
+
     }
 }
