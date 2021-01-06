@@ -45,19 +45,30 @@ namespace GMSBackend.Services
 
         public string GetUserRole(string userName)
         {
-            if (!IsAnExistingUser(userName))
+            
+            var user = _dBRepository.Users.FirstOrDefault(l => l.UserName == userName);
+
+            if (user == null)
             {
                 return string.Empty;
             }
 
-            return "user";
-
-            //if (userName == "admin")
-            //{
-            //    return UserRole.Admin;
-            //}
-
-            //return UserRole.BasicUser;
+            switch (user.UserRoleId)
+            {
+                case 1:
+                    return "admin";
+                case 2:
+                    return "gymboss";
+                case 3:
+                    return "gymstaff";
+                case 4:
+                    return "client";
+                case 5:
+                    return "coach";
+                default:
+                    return "client";
+            }
+           
         }
     }
 

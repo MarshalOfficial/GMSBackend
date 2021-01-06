@@ -18,6 +18,6 @@ namespace GMSBackend.Entities
         public string Password { get; set; }
 
         [Required]
-        public UserRole UserRoles { get; set; }
+        public int UserRoleId { get; set; } 
     }
 }
