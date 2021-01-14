@@ -1,4 +1,5 @@
 ﻿using GMSBackend.Entities;
+using GMSBackend.Models;
 using GMSBackend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,46 +25,121 @@ namespace GMSBackend.Controllers
 
         [HttpPost("addCustomer")]
         [Authorize]
-        public ActionResult AddCustomer([FromBody] Account request)
+        public async Task<ActionResult> AddCustomer([FromBody] Account request)
         {
-            if (!ModelState.IsValid)
+           try
             {
-                return BadRequest();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                request.CreateDate = DateTime.Now;
+                request.JoinDate = DateTime.Now;
+                request.AccountTypeId = 1; 
+                await _dBRepository.Accounts.AddAsync(request);
+                await _dBRepository.SaveChangesAsync();
+
+
+                return Ok(new CoreResponse() { isSuccess = true, data = request });
+
             }
-
-            request.CreateDate = DateTime.Now;
-            request.JoinDate = DateTime.Now;
-            request.AccountTypeId = 1; // 1 is for customer
-            //request.MembershipJoinTypeId = request.JobInfoId = null;
-            _dBRepository.Accounts.Add(request);
-            _dBRepository.SaveChanges();
-
-            return Ok(request);
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { isSuccess = true, data = null, devMessage = ex.Message });
+            }
         }
 
 
         [HttpGet("getJobInfos")]
         [Authorize]
-        public List<JobInfo> GetJobInfos()
+        public async Task<ActionResult> GetJobInfos()
         {
-            return _dBRepository.JobInfos.AsNoTracking().ToList();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var lst = await _dBRepository.JobInfos.AsNoTracking().ToListAsync();
+
+                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { isSuccess = true, data = null, devMessage = ex.Message });
+            }
         }
 
         [HttpGet("getMembershipJoinTypes")]
         [Authorize]
-        public List<MembershipJoinType> GetMembershipJoinTypes()
+        public async Task<ActionResult> GetMembershipJoinTypes()
         {
-            return _dBRepository.MembershipJoinTypes.AsNoTracking().ToList();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var lst = await _dBRepository.MembershipJoinTypes.AsNoTracking().ToListAsync(); 
+
+                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { isSuccess = true, data = null, devMessage = ex.Message });
+            }
         }
 
 
         [HttpGet("getCustomers")]
         [Authorize]
-        public List<Account> GetCustomers()
+        public async Task<ActionResult> GetCustomers()
         {
-            return _dBRepository.Accounts.Where(l => l.AccountTypeId == 1).AsNoTracking().ToList();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var lst = await _dBRepository.Accounts.Where(l => l.AccountTypeId == 1).AsNoTracking().ToListAsync();
+                
+                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { isSuccess = true, data = null, devMessage = ex.Message });
+            }
         }
 
+        
+        [HttpGet("getCustomer")]
+        [Authorize]
+        public async Task<ActionResult> GetCustomer(long ID)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var cus = await _dBRepository.Accounts.Where(l => l.Id == ID).AsNoTracking().FirstOrDefaultAsync();
+
+                return Ok(new CoreResponse() { isSuccess = true, data = cus });
+                
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { isSuccess = true, data = null,devMessage=ex.Message });
+            }
+        }
 
     }
 }
