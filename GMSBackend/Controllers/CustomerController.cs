@@ -1,4 +1,5 @@
-﻿using GMSBackend.Entities;
+﻿using AutoMapper;
+using GMSBackend.Entities;
 using GMSBackend.Models;
 using GMSBackend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -23,8 +24,7 @@ namespace GMSBackend.Controllers
             _dBRepository = dBRepository;
         }
 
-        [HttpPost("addCustomer")]
-        [Authorize]
+        [HttpPost("addCustomer")]        
         public async Task<ActionResult> AddCustomer([FromBody] Account request)
         {
            try
@@ -51,8 +51,7 @@ namespace GMSBackend.Controllers
         }
 
 
-        [HttpGet("getJobInfos")]
-        [Authorize]
+        [HttpGet("getJobInfos")]        
         public async Task<ActionResult> GetJobInfos()
         {
             try
@@ -73,8 +72,7 @@ namespace GMSBackend.Controllers
             }
         }
 
-        [HttpGet("getMembershipJoinTypes")]
-        [Authorize]
+        [HttpGet("getMembershipJoinTypes")]        
         public async Task<ActionResult> GetMembershipJoinTypes()
         {
             try
@@ -96,8 +94,7 @@ namespace GMSBackend.Controllers
         }
 
 
-        [HttpGet("getCustomers")]
-        [Authorize]
+        [HttpGet("getCustomers")]        
         public async Task<ActionResult> GetCustomers()
         {
             try
@@ -119,8 +116,7 @@ namespace GMSBackend.Controllers
         }
 
         
-        [HttpGet("getCustomer")]
-        [Authorize]
+        [HttpGet("getCustomer")]        
         public async Task<ActionResult> GetCustomer(long ID)
         {
             try
@@ -141,9 +137,8 @@ namespace GMSBackend.Controllers
             }
         }
 
-        [HttpPut("updateCustomer")]
-        [Authorize]
-        public async Task<ActionResult> UpdateCustomer(Account customer) 
+        [HttpPut("updateCustomer")]        
+        public async Task<ActionResult> UpdateCustomer([FromBody] Account customer) 
         {
             try
             {
@@ -153,7 +148,18 @@ namespace GMSBackend.Controllers
                 }
 
                 var cus = await _dBRepository.Accounts.Where(l => l.Id == customer.Id).FirstOrDefaultAsync();
-                cus = customer;
+                if (cus == null)
+                {
+                    throw new Exception("there is no customer with this id that passed in.");
+                }
+
+                //todo functional below code with extension method
+                var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<Account, Account>();
+                }));
+                mapper.Map(customer, cus);
+
                 await _dBRepository.SaveChangesAsync();
 
                 return Ok(new CoreResponse() { isSuccess = true, data = cus });
@@ -168,8 +174,7 @@ namespace GMSBackend.Controllers
 
         #region [ClientPeriodicCheckup]
 
-        [HttpPost("addCheckup")]
-        [Authorize]
+        [HttpPost("addCheckup")]        
         public async Task<ActionResult> AddClientCheckup([FromBody] ClientPeriodicCheckUp request)
         {
             try
@@ -180,6 +185,7 @@ namespace GMSBackend.Controllers
                 }
 
                 request.CreateDate = DateTime.Now;
+                request.IsDeleted = false;
 
                 if (!await _dBRepository.Accounts.AnyAsync(p => p.Id == request.AccountID))
                     throw new Exception("there is not any Customer with AccountID = " + request.AccountID.ToString());
@@ -197,8 +203,7 @@ namespace GMSBackend.Controllers
             }
         }
 
-        [HttpDelete("deleteCheckup")]
-        [Authorize]
+        [HttpDelete("deleteCheckup")]        
         public async Task<ActionResult> DeleteClientCheckup(long id)
         {
             try
@@ -211,7 +216,7 @@ namespace GMSBackend.Controllers
                 var obj = await _dBRepository.ClientPeriodicCheckUps.Where(l => l.ID == id).FirstOrDefaultAsync();
                 if(obj == null)
                 {
-                    throw new Exception("the is no client checkup row with this id that passed in.");
+                    throw new Exception("there is no clientCheckup with this id that passed in.");
                 }
                 obj.IsDeleted = true;
                 await _dBRepository.SaveChangesAsync();
@@ -226,8 +231,7 @@ namespace GMSBackend.Controllers
             }
         }
 
-        [HttpGet("getClientCheckups")]
-        [Authorize]
+        [HttpGet("getClientCheckups")]        
         public async Task<ActionResult> GetClientCheckups(long customerid)
         {
             try
