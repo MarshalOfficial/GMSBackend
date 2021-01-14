@@ -34,6 +34,8 @@ namespace GMSBackend.Controllers
                 }
 
                 request.CreateDate = DateTime.Now;
+                request.IsActive = true;
+                request.IsDeleted = false;
                 request.CodingID = 1;
 
                 await _dBRepository.ProductMains.AddAsync(request);

@@ -3,15 +3,17 @@ using System;
 using GMSBackend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GMSBackend.Migrations
 {
     [DbContext(typeof(DBRepository))]
-    partial class DBRepositoryModelSnapshot : ModelSnapshot
+    [Migration("20210114225013_invoicerelation")]
+    partial class invoicerelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,7 +150,9 @@ namespace GMSBackend.Migrations
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValueSql("0");
 
                     b.Property<double?>("LeftArm")
                         .HasColumnType("double precision");
@@ -258,10 +262,14 @@ namespace GMSBackend.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValueSql("1");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValueSql("0");
 
                     b.Property<string>("ProductBarCode")
                         .HasColumnType("text");

@@ -10,7 +10,10 @@ namespace GMSBackend.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long ID { get; set; }
 
-        public long HeaderID { get; set; }
+        public long InvoiceID { get; set; }
+
+        [ForeignKey("InvoiceID")]   // if not specifed, Order_Id column will be used
+        public SaleInvoiceHeader SaleInvoiceHeader { get; set; }    
 
         public int ProductID { get; set; }
 

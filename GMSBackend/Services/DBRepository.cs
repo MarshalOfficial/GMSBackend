@@ -49,18 +49,6 @@ namespace GMSBackend.Services
                 .HasDefaultValueSql("NOW()")
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<ProductMain>().Property(e => e.IsActive)
-                .HasDefaultValueSql("1")
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<ProductMain>().Property(e => e.IsDeleted)
-                .HasDefaultValueSql("0")
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<ClientPeriodicCheckUp>().Property(e => e.IsDeleted)
-                .HasDefaultValueSql("0")
-                .ValueGeneratedOnAdd();
-
         }
     }
 }
