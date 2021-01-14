@@ -53,13 +53,10 @@ namespace GMSBackend.Entities
         public bool IsDeleted { get; set; }
 
         public int AccountTypeId { get; set; }
-        public AccountType? AccountType { get; set; }
-
+        
         public int? MembershipJoinTypeId { get; set; }
-        public MembershipJoinType? MembershipJoinType { get; set; }
-
+        
         public int? JobInfoId { get; set; }
-        public JobInfo? JobInfo { get; set; }
-
+        
     }
 }

@@ -35,9 +35,6 @@ namespace GMSBackend.Controllers
             request.JoinDate = DateTime.Now;
             request.AccountTypeId = 1; // 1 is for customer
             //request.MembershipJoinTypeId = request.JobInfoId = null;
-            request.AccountType = null;
-            request.JobInfo = null;
-            request.MembershipJoinType = null;
             _dBRepository.Accounts.Add(request);
             _dBRepository.SaveChanges();
 
