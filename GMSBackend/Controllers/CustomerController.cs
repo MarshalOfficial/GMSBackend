@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,8 +15,9 @@ namespace GMSBackend.Controllers
     [Route("api/[controller]")]
     public class CustomerController : Controller
     {
-        DBRepository _dBRepository;
+        private DBRepository _dBRepository;
 
+        #region [Customer]
         public CustomerController(DBRepository dBRepository)
         {
             _dBRepository = dBRepository;
@@ -46,7 +46,7 @@ namespace GMSBackend.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = true, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
             }
         }
 
@@ -69,7 +69,7 @@ namespace GMSBackend.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = true, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
             }
         }
 
@@ -91,7 +91,7 @@ namespace GMSBackend.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = true, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
             }
         }
 
@@ -114,7 +114,7 @@ namespace GMSBackend.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = true, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
             }
         }
 
@@ -137,9 +137,117 @@ namespace GMSBackend.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = true, data = null,devMessage=ex.Message });
+                return Ok(new CoreResponse() { isSuccess = false, data = null,devMessage=ex.Message });
             }
         }
 
+        [HttpPut("updateCustomer")]
+        [Authorize]
+        public async Task<ActionResult> UpdateCustomer(Account customer) 
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var cus = await _dBRepository.Accounts.Where(l => l.Id == customer.Id).FirstOrDefaultAsync();
+                cus = customer;
+                await _dBRepository.SaveChangesAsync();
+
+                return Ok(new CoreResponse() { isSuccess = true, data = cus });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+            }
+        }
+        #endregion
+
+        #region [ClientPeriodicCheckup]
+
+        [HttpPost("addCheckup")]
+        [Authorize]
+        public async Task<ActionResult> AddClientCheckup([FromBody] ClientPeriodicCheckUp request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                request.CreateDate = DateTime.Now;
+
+                if (!await _dBRepository.Accounts.AnyAsync(p => p.Id == request.AccountID))
+                    throw new Exception("there is not any Customer with AccountID = " + request.AccountID.ToString());
+                
+                await _dBRepository.ClientPeriodicCheckUps.AddAsync(request);
+                await _dBRepository.SaveChangesAsync();
+
+
+                return Ok(new CoreResponse() { isSuccess = true, data = request });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+            }
+        }
+
+        [HttpDelete("deleteCheckup")]
+        [Authorize]
+        public async Task<ActionResult> DeleteClientCheckup(long id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var obj = await _dBRepository.ClientPeriodicCheckUps.Where(l => l.ID == id).FirstOrDefaultAsync();
+                if(obj == null)
+                {
+                    throw new Exception("the is no client checkup row with this id that passed in.");
+                }
+                obj.IsDeleted = true;
+                await _dBRepository.SaveChangesAsync();
+
+
+                return Ok(new CoreResponse() { isSuccess = true, data = obj });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+            }
+        }
+
+        [HttpGet("getClientCheckups")]
+        [Authorize]
+        public async Task<ActionResult> GetClientCheckups(long customerid)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var lst = await _dBRepository.ClientPeriodicCheckUps.Where(l => l.AccountID == customerid && l.IsDeleted == false).AsNoTracking().ToListAsync();
+
+                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+            }
+        }
+
+        #endregion
     }
 }
