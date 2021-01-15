@@ -16,7 +16,7 @@ namespace GMSBackend.Controllers
     {
         [HttpPost]
         [Route("upload")]
-        public async Task<ActionResult> Upload([FromForm] FileModel file)   
+        public async Task<object> Upload([FromForm] FileModel file)
         {
             try
             {
@@ -34,17 +34,18 @@ namespace GMSBackend.Controllers
                     }
                 }
 
-                return StatusCode(StatusCodes.Status201Created);
+
+                return new CoreResponse() { isSuccess = true, data = file };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return new CoreResponse() { isSuccess = false, data = file, devMessage = ex.Message };
             }
         }
 
         [HttpGet]
         [Route("download")]
-        public async Task<ActionResult> Download([FromQuery] string file)
+        public async Task<object> Download([FromQuery] string file)
         {
             try
             {
@@ -62,9 +63,9 @@ namespace GMSBackend.Controllers
 
                 return File(memory, GetContentType(filePath), file);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return new CoreResponse() { isSuccess = false, devMessage = ex.Message };
             }
         }
 
