@@ -57,6 +57,8 @@ namespace GMSBackend.Entities
         public int? MembershipJoinTypeId { get; set; }
         
         public int? JobInfoId { get; set; }
-        
+
+        public string ContractFilePath { get; set; }    
+
     }
 }

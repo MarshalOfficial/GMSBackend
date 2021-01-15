@@ -41,5 +41,7 @@ namespace GMSBackend.Entities
         public double? LeftCalves { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public int SessionNo { get; set; }  
     }
 }
