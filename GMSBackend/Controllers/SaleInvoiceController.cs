@@ -70,7 +70,7 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var lst = await _dBRepository.SaleInvoiceHeaders.Where(l => l.IsDeleted == false).Include(x => x.SaleInvoiceDetails).AsNoTracking().ToListAsync();
+                var lst = await _dBRepository.SaleInvoiceHeaders.Where(l => l.IsDeleted == false).Include(x => x.SaleInvoiceDetails).Include(r => r.SaleInvoicePayments).AsNoTracking().ToListAsync();
 
                 return Ok(new CoreResponse() { isSuccess = true, data = lst });
 

@@ -29,6 +29,8 @@ namespace GMSBackend.Entities
 
         public bool IsDeleted { get; set; }
 
-        public List<SaleInvoiceDetails> SaleInvoiceDetails { get; set; }    
+        public List<SaleInvoiceDetails> SaleInvoiceDetails { get; set; }
+
+        public List<SaleInvoicePayment> SaleInvoicePayments { get; set; }       
     }
 }

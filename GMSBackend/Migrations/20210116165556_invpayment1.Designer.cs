@@ -3,66 +3,23 @@ using System;
 using GMSBackend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GMSBackend.Migrations
 {
     [DbContext(typeof(DBRepository))]
-    partial class DBRepositoryModelSnapshot : ModelSnapshot
+    [Migration("20210116165556_invpayment1")]
+    partial class invpayment1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.0");
-
-            modelBuilder.Entity("GMSBackend.Entities.AccTransaction", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<long>("AccountID")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("AccountTypeID")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsVariz")
-                        .HasColumnType("boolean");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<long>("UserID")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountID");
-
-                    b.HasIndex("AccountTypeID");
-
-                    b.ToTable("AccTransactions");
-                });
 
             modelBuilder.Entity("GMSBackend.Entities.Account", b =>
                 {
@@ -523,25 +480,6 @@ namespace GMSBackend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserRoles");
-                });
-
-            modelBuilder.Entity("GMSBackend.Entities.AccTransaction", b =>
-                {
-                    b.HasOne("GMSBackend.Entities.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GMSBackend.Entities.AccountType", "AccountType")
-                        .WithMany()
-                        .HasForeignKey("AccountTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("AccountType");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.SaleInvoiceDetails", b =>
