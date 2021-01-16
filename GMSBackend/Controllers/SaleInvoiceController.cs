@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -44,7 +43,8 @@ namespace GMSBackend.Controllers
                 {
                     throw new Exception("Customer is not valid, check AccountID value plz.");
                 }
-
+                request.Price = request.SaleInvoiceDetails.Sum(l => l.Price * l.Qty);
+                request.Reduction = request.SaleInvoiceDetails.Sum(l => l.Reduction_Price * l.Qty);
 
                 await _dBRepository.SaleInvoiceHeaders.AddAsync(request);
                 await _dBRepository.SaveChangesAsync();
