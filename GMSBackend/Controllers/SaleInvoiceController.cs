@@ -1,10 +1,12 @@
-﻿using GMSBackend.Entities;
+﻿using AutoMapper;
+using GMSBackend.Entities;
 using GMSBackend.Models;
 using GMSBackend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,7 +35,7 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                request.CreateDate = DateTime.Now;
+                request.CreateDate = request.InvDate = DateTime.Now;
                 
                 if(request.SaleInvoiceDetails == null || request.SaleInvoiceDetails.Count == 0)
                 {
@@ -72,7 +74,15 @@ namespace GMSBackend.Controllers
 
                 var lst = await _dBRepository.SaleInvoiceHeaders.Where(l => l.IsDeleted == false).Include(x => x.SaleInvoiceDetails).Include(r => r.SaleInvoicePayments).AsNoTracking().ToListAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+                var result = new List<SaleInvoiceHeaderModel>();
+
+                var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<SaleInvoiceHeader, SaleInvoiceHeaderModel>();
+                }));
+                mapper.Map(lst, result);
+
+                return Ok(new CoreResponse() { isSuccess = true, data = result });
 
             }
             catch (Exception ex)

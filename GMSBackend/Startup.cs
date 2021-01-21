@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace GMSBackend
 {
     public class Startup
@@ -39,6 +40,8 @@ namespace GMSBackend
             //services.AddHttpsRedirection(options => options.HttpsPort = 5001);
 
             services.AddEntityFrameworkNpgsql().AddDbContext<DBRepository>(opt => opt.UseNpgsql(Configuration.GetConnectionString("MyWebApiConection")));
+
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             var jwtTokenConfig = Configuration.GetSection("jwtTokenConfig").Get<JwtTokenConfig>();
             services.AddSingleton(jwtTokenConfig);

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -109,7 +110,15 @@ namespace GMSBackend.Controllers
 
                 var lst = await _dBRepository.AccTransactions.Where(l => l.IsDeleted == false).Include(x => x.Account).Include(p => p.AccountType).AsNoTracking().ToListAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+                var result = new List<AccTransactionViewModel>();
+
+                var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<AccTransaction, AccTransactionViewModel>();
+                }));
+                mapper.Map(lst, result);
+
+                return Ok(new CoreResponse() { isSuccess = true, data = result });
 
             }
             catch (Exception ex)
@@ -131,7 +140,15 @@ namespace GMSBackend.Controllers
 
                 var cus = await _dBRepository.AccTransactions.Where(l => l.Id == ID).Include(x => x.Account).Include(p => p.AccountType).AsNoTracking().FirstOrDefaultAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = cus });
+                var result = new AccTransactionViewModel();
+
+                var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<AccTransaction, AccTransactionViewModel>();
+                }));
+                mapper.Map(cus, result);
+
+                return Ok(new CoreResponse() { isSuccess = true, data = result });
 
             }
             catch (Exception ex)

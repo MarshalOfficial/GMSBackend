@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -243,7 +244,15 @@ namespace GMSBackend.Controllers
 
                 var lst = await _dBRepository.ClientPeriodicCheckUps.Where(l => l.AccountID == customerid && l.IsDeleted == false).AsNoTracking().ToListAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+                var result = new List<ClientPeriodicCheckupModel>();
+
+                var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<ClientPeriodicCheckUp, ClientPeriodicCheckupModel>();
+                }));
+                mapper.Map(lst, result);
+
+                return Ok(new CoreResponse() { isSuccess = true, data = result });
 
             }
             catch (Exception ex)
