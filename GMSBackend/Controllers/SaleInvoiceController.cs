@@ -108,5 +108,26 @@ namespace GMSBackend.Controllers
                 return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
             }
         }
+
+        [HttpGet("getSaleInvoicePaymentTypes")]
+        public async Task<ActionResult> GetSaleInvoicePaymentTypes()    
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var lst = await _dBRepository.SaleInvoicePaymentTypes.AsNoTracking().ToListAsync();
+
+                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+            }
+        }
     }
 }
