@@ -60,6 +60,7 @@ namespace GMSBackend.Controllers
                 await _dBRepository.AccTransactions.AddAsync(request);
                 await _dBRepository.SaveChangesAsync();
 
+                ///////////////todo update customer balance
 
                 return Ok(new CoreResponse() { isSuccess = true, data = request });
 

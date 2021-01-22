@@ -63,7 +63,9 @@ namespace GMSBackend.Controllers
                     CreateDate = DateTime.Now,
                     Description = "ثبت اتومات از فاکتور فروش"
                 };
-
+                
+                ///////////////todo update customer balance
+                
                 await _dBRepository.AccTransactions.AddAsync(acctrans);
                 await _dBRepository.SaveChangesAsync();
 
