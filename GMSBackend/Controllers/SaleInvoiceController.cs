@@ -18,10 +18,12 @@ namespace GMSBackend.Controllers
     public class SaleInvoiceController : Controller
     {
         private DBRepository _dBRepository;
+        private DBDapperRepository _dBDapperRepository;
 
-        public SaleInvoiceController(DBRepository dBRepository)
+        public SaleInvoiceController(DBRepository dBRepository,DBDapperRepository dBDapperRepository)
         {
             _dBRepository = dBRepository;
+            _dBDapperRepository = dBDapperRepository;
         }
 
 
@@ -72,18 +74,19 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var lst = await _dBRepository.SaleInvoiceHeaders.Where(l => l.IsDeleted == false).Include(x => x.SaleInvoiceDetails).Include(r => r.SaleInvoicePayments).AsNoTracking().ToListAsync();
-
-                var result = new List<SaleInvoiceHeaderModel>();
-
-                var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<SaleInvoiceHeader, SaleInvoiceHeaderModel>();
-                }));
-                mapper.Map(lst, result);
-
-                return Ok(new CoreResponse() { isSuccess = true, data = result });
-
+                var query = " " +
+                    "select h.*,a.\"Title\" as \"AccountTitle\", a.\"FirstName\", a.\"LastName\",d.\"ProductID\", d.\"ProductName\", d.\"Qty\", " +
+                    "d.\"Price\" as \"ProductPrice\", d.\"Reduction_Percent\", d.\"Reduction_Price\", d.\"SessionQty\", d.\"SessionReserved\", d.\"SessionUsed\",p.\"SaleInvoicePaymentTypeId\", " +
+                    "p.\"Price\" aS \"paymentPrice\", p.\"Description\",pt.\"Title\" as \"PaymentTypeTitle\" " +
+                    "from public.\"SaleInvoiceHeaders\" h " +
+                    "left join public.\"SaleInvoiceDetails\" d on h.\"ID\" = d.\"InvoiceID\" " +
+                    "left join public.\"SaleInvoicePayments\" p on h.\"ID\" = p.\"InvoiceID\" " +
+                    "left join public.\"SaleInvoicePaymentTypes\" pt on p.\"SaleInvoicePaymentTypeId\" = pt.\"Id\" " +
+                    "left join public.\"Accounts\" a on h.\"AccountID\" = a.\"Id\" " +
+                    "where h.\"IsDeleted\" = '0' and d.\"IsDeleted\" = '0' ";
+                
+                var lst = await _dBDapperRepository.RunQueryAsync<SaleInvoiceReportModel>(query);               
+                return Ok(new CoreResponse() { isSuccess = true, data = lst });
             }
             catch (Exception ex)
             {

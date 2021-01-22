@@ -15,6 +15,9 @@ namespace GMSBackend.Entities
 
         public long AccountID { get; set; }
 
+        [ForeignKey("AccountID")] 
+        public Account Account { get; set; }    
+
         public long? VisitorID { get; set; }
 
         public short InvType { get; set; }

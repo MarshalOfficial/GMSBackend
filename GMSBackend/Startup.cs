@@ -9,14 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 
 namespace GMSBackend
@@ -40,6 +36,7 @@ namespace GMSBackend
             //services.AddHttpsRedirection(options => options.HttpsPort = 5001);
 
             services.AddEntityFrameworkNpgsql().AddDbContext<DBRepository>(opt => opt.UseNpgsql(Configuration.GetConnectionString("MyWebApiConection")));
+            services.AddSingleton(obj => new DBDapperRepository(Configuration.GetConnectionString("MyWebApiConection")));
 
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 

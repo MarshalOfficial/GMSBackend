@@ -3,15 +3,17 @@ using System;
 using GMSBackend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GMSBackend.Migrations
 {
     [DbContext(typeof(DBRepository))]
-    partial class DBRepositoryModelSnapshot : ModelSnapshot
+    [Migration("20210121220213_accountidfkeysi")]
+    partial class accountidfkeysi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -464,8 +466,6 @@ namespace GMSBackend.Migrations
 
                     b.HasIndex("InvoiceID");
 
-                    b.HasIndex("SaleInvoicePaymentTypeId");
-
                     b.ToTable("SaleInvoicePayments");
                 });
 
@@ -578,15 +578,7 @@ namespace GMSBackend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GMSBackend.Entities.SaleInvoicePaymentType", "SaleInvoicePaymentType")
-                        .WithMany()
-                        .HasForeignKey("SaleInvoicePaymentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("SaleInvoiceHeader");
-
-                    b.Navigation("SaleInvoicePaymentType");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.SaleInvoiceHeader", b =>

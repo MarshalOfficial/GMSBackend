@@ -15,10 +15,13 @@ namespace GMSBackend.Entities
 
         public long InvoiceID { get; set; }
 
-        [ForeignKey("InvoiceID")]   // if not specifed, Order_Id column will be used
+        [ForeignKey("InvoiceID")] 
         public SaleInvoiceHeader SaleInvoiceHeader { get; set; }
 
         public int SaleInvoicePaymentTypeId { get; set; }
+
+        [ForeignKey("SaleInvoicePaymentTypeId")]
+        public SaleInvoicePaymentType SaleInvoicePaymentType { get; set; }
 
         public decimal Price { get; set; }
 
