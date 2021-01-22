@@ -58,7 +58,9 @@ namespace GMSBackend.Entities
         
         public int? JobInfoId { get; set; }
 
-        public string ContractFilePath { get; set; }    
+        public string ContractFilePath { get; set; }
+
+        public decimal Balance { get; set; }    
 
     }
 }

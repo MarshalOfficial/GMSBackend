@@ -34,5 +34,7 @@ namespace GMSBackend.Entities
 
         public DateTime? DeletedDate { get; set; }
 
+        public long? InvoiceID { get; set; }
+
     }
 }

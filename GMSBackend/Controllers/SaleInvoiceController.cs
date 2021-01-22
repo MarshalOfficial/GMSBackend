@@ -53,6 +53,19 @@ namespace GMSBackend.Controllers
                 await _dBRepository.SaleInvoiceHeaders.AddAsync(request);
                 await _dBRepository.SaveChangesAsync();
 
+                var acctrans = new AccTransaction()
+                {
+                    AccountID = request.AccountID,
+                    InvoiceID = request.ID,
+                    AccountTypeID = 9,
+                    IsVariz = true,
+                    Price = request.SaleInvoicePayments.Sum(l => l.Price),
+                    CreateDate = DateTime.Now,
+                    Description = "ثبت اتومات از فاکتور فروش"
+                };
+
+                await _dBRepository.AccTransactions.AddAsync(acctrans);
+                await _dBRepository.SaveChangesAsync();
 
                 return Ok(new CoreResponse() { isSuccess = true, data = request });
 
