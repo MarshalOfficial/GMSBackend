@@ -55,21 +55,7 @@ namespace GMSBackend.Services
                 return string.Empty;
             }
 
-            switch (user.UserRoleId)
-            {
-                case 1:
-                    return "admin";
-                case 2:
-                    return "gymboss";
-                case 3:
-                    return "gymstaff";
-                case 4:
-                    return "client";
-                case 5:
-                    return "coach";
-                default:
-                    return "client";
-            }
+            return GetRole(user.UserRoleId);
 
         }
 
@@ -84,29 +70,20 @@ namespace GMSBackend.Services
                 return result;
             }
 
-            switch (user.UserRoleId)
-            {
-                case 1:
-                    result = new Tuple<int, string>(user.Id, "admin");
-                    break;
-                case 2:
-                    result = new Tuple<int, string>(user.Id, "gymboss");
-                    break;
-                case 3:
-                    result = new Tuple<int, string>(user.Id, "gymstaff");
-                    break;
-                case 4:
-                    result = new Tuple<int, string>(user.Id, "client");
-                    break;
-                case 5:
-                    result = new Tuple<int, string>(user.Id, "coach");
-                    break;
-                default:
-                    result = new Tuple<int, string>(user.Id, "client");
-                    break;
-            }
+            return new Tuple<int, string>(user.Id, GetRole(user.UserRoleId));
+        }
 
-            return result;
+        private string GetRole(int roleid)
+        {
+            return roleid switch
+            {
+                1 => "admin",
+                2 => "gymboss",
+                3 => "gymstaff",
+                4 => "client",
+                5 => "coach",
+                _ => "client",
+            };
         }
     }
 

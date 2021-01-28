@@ -35,7 +35,8 @@ namespace GMSBackend
             //services.AddLettuceEncrypt();
             //services.AddHttpsRedirection(options => options.HttpsPort = 5001);
 
-            services.AddEntityFrameworkNpgsql().AddDbContext<DBRepository>(opt => opt.UseNpgsql(Configuration.GetConnectionString("MyWebApiConection")));
+            services.AddDbContext<DBRepository>(options => options.UseNpgsql(Configuration.GetConnectionString("MyWebApiConection")));
+            //services.AddEntityFrameworkNpgsql().AddDbContext<DBRepository>(opt => opt.UseNpgsql(Configuration.GetConnectionString("MyWebApiConection")));
             services.AddSingleton(obj => new DBDapperRepository(Configuration.GetConnectionString("MyWebApiConection")));
 
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
