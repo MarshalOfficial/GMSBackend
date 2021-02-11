@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GMSBackend.Entities;
 using GMSBackend.Models;
+using GMSBackend.Models.pagination_reports;
 using GMSBackend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +19,13 @@ namespace GMSBackend.Controllers
     public class CustomerController : Controller
     {
         private DBRepository _dBRepository;
+        private DBDapperRepository _dBDapperRepository;
 
         #region [Customer]
-        public CustomerController(DBRepository dBRepository)
+        public CustomerController(DBRepository dBRepository, DBDapperRepository dBDapperRepository)
         {
             _dBRepository = dBRepository;
+            _dBDapperRepository = dBDapperRepository;
         }
 
         [HttpPost("addCustomer")]        
@@ -104,9 +107,15 @@ namespace GMSBackend.Controllers
                 {
                     return BadRequest();
                 }
-                
-                var lst = await _dBRepository.accounts.Where(l => l.account_type_id == 1).AsNoTracking().ToListAsync();
-                
+
+                var query = $@"select * from public.accounts
+                                where account_type_id = 1
+                                and first_name like '%{first_name}%'
+                                and last_name like '%{last_name}%'
+                                and mobile like '%{mobile}%'  ";
+
+                var lst = await _dBDapperRepository.RunQueryAsync<Account>(query); //await _dBRepository.accounts.Where(l => l.account_type_id == 1).AsNoTracking().ToListAsync();
+
                 return Ok(new CoreResponse() { is_success = true, data = lst });
 
             }
@@ -116,7 +125,39 @@ namespace GMSBackend.Controllers
             }
         }
 
-        
+        [HttpGet("getCustomers_paginate")]
+        public async Task<ActionResult> GetCustomersPaginate(string first_name, string last_name, string mobile,int page=1,int pagesize=10)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var query = $@" select count(1) OVER() AS row_count,* 
+                                from public.accounts
+                                where account_type_id = 1
+                                and first_name like '%{first_name}%'
+                                and last_name like '%{last_name}%'
+                                and mobile like '%{mobile}%'
+                                ORDER BY id 
+                                LIMIT {pagesize} 
+                                OFFSET ({pagesize} * ({page}-1)) ";
+
+                var lst = await _dBDapperRepository.RunQueryAsync<AccountPaginatedModel>(query); 
+
+
+                return Ok(new CoreResponse() { is_success = true, data = lst });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
+            }
+        }
+
+
         [HttpGet("getCustomer")]        
         public async Task<ActionResult> GetCustomer(long ID)
         {
