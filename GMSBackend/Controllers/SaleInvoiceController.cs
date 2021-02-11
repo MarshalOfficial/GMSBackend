@@ -89,16 +89,16 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var query = " " +
-                    "select h.*,a.\"Title\" as \"AccountTitle\", a.\"FirstName\", a.\"LastName\",d.\"ProductID\", d.\"ProductName\", d.\"Qty\", " +
-                    "d.\"Price\" as \"ProductPrice\", d.\"Reduction_Percent\", d.\"Reduction_Price\", d.\"SessionQty\", d.\"SessionReserved\", d.\"SessionUsed\",p.\"SaleInvoicePaymentTypeId\", " +
-                    "p.\"Price\" aS \"paymentPrice\", p.\"Description\",pt.\"Title\" as \"PaymentTypeTitle\" " +
-                    "from public.\"SaleInvoiceHeaders\" h " +
-                    "left join public.\"SaleInvoiceDetails\" d on h.\"ID\" = d.\"InvoiceID\" " +
-                    "left join public.\"SaleInvoicePayments\" p on h.\"ID\" = p.\"InvoiceID\" " +
-                    "left join public.\"SaleInvoicePaymentTypes\" pt on p.\"SaleInvoicePaymentTypeId\" = pt.\"Id\" " +
-                    "left join public.\"Accounts\" a on h.\"AccountID\" = a.\"Id\" " +
-                    "where h.\"IsDeleted\" = '0' and d.\"IsDeleted\" = '0' ";
+                var query = $@"
+                                select h.*,a.title as account_title, a.first_name, a.last_name,d.product_id, d.product_name, 
+                                 d.qty, d.price as product_price, d.reduction_percent, d.reduction_price, d.session_qty, 
+                                 d.session_reserved, d.session_used,p.sale_invoice_payment_type_id, p.price aS payment_price, 
+                                 p.description,pt.title as payment_type_title 
+                                 from public.sale_invoice_headers h 
+                                 left join public.sale_invoice_details d on h.id = d.invoice_id
+                                 left join public.sale_invoice_payments p on h.id = p.invoice_id
+                                 left join public.sale_invoice_payment_types pt on p.sale_invoice_payment_type_id = pt.id 
+                                 left join public.accounts a on h.account_id = a.Id where h.is_deleted = '0' and d.is_deleted = '0' ";
                 
                 var lst = await _dBDapperRepository.RunQueryAsync<SaleInvoiceReportModel>(query);               
                 return Ok(new CoreResponse() { is_success = true, data = lst });
