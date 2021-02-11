@@ -5,11 +5,11 @@ namespace GMSBackend.Models
 {
     public class ClientPeriodicCheckupModel: ClientPeriodicCheckUp
     {
-        public string CreateDateFa  
+        public string create_date_fa    
         {
             get
             {
-                var str = new PersianDateTime(CreateDate);
+                var str = new PersianDateTime(create_date);
                 return str.ToString();
             }
         }

@@ -37,27 +37,27 @@ namespace GMSBackend.Controllers
                 return BadRequest();
             }
 
-            if (!_userService.IsValidUserCredentials(request.UserName, request.Password))
+            if (!_userService.IsValidUserCredentials(request.user_name, request.password))
             {
                 return Unauthorized();
             }
 
-            var idrole = _userService.GetUserIDAndRole(request.UserName);
+            var idrole = _userService.GetUserIDAndRole(request.user_name);
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,request.UserName),
+                new Claim(ClaimTypes.Name,request.user_name),
                 new Claim(ClaimTypes.Role, idrole.Item2)
             };
 
-            var jwtResult = _jwtAuthManager.GenerateTokens(request.UserName, claims, DateTime.Now);
-            _logger.LogInformation($"User [{request.UserName}] logged in the system.");
+            var jwtResult = _jwtAuthManager.GenerateTokens(request.user_name, claims, DateTime.Now);
+            _logger.LogInformation($"User [{request.user_name}] logged in the system.");
             return Ok(new LoginResult
             {
-                UserID = idrole.Item1.ToString(),
-                UserName = request.UserName,
-                Role = idrole.Item2,
-                AccessToken = jwtResult.AccessToken,
-                RefreshToken = jwtResult.RefreshToken.TokenString
+                user_id = idrole.Item1.ToString(),
+                user_name= request.user_name,
+                role = idrole.Item2,
+                access_token = jwtResult.access_token,
+                refresh_token = jwtResult.refresh_token.token_string
             });
         }
 
@@ -67,9 +67,9 @@ namespace GMSBackend.Controllers
         {
             return Ok(new LoginResult
             {
-                UserName = User.Identity.Name,
-                Role = User.FindFirst(ClaimTypes.Role)?.Value ?? string.Empty,
-                OriginalUserName = User.FindFirst("OriginalUserName")?.Value
+                user_name = User.Identity.Name,
+                role = User.FindFirst(ClaimTypes.Role)?.Value ?? string.Empty,
+                original_user_name = User.FindFirst("OriginalUserName")?.Value
             });
         }
 
@@ -95,20 +95,20 @@ namespace GMSBackend.Controllers
                 var userName = User.Identity.Name;
                 _logger.LogInformation($"User [{userName}] is trying to refresh JWT token.");
 
-                if (string.IsNullOrWhiteSpace(request.RefreshToken))
+                if (string.IsNullOrWhiteSpace(request.refresh_token))
                 {
                     return Unauthorized();
                 }
 
                 var accessToken = await HttpContext.GetTokenAsync("Bearer", "access_token");
-                var jwtResult = _jwtAuthManager.Refresh(request.RefreshToken, accessToken, DateTime.Now);
+                var jwtResult = _jwtAuthManager.Refresh(request.refresh_token, accessToken, DateTime.Now);
                 _logger.LogInformation($"User [{userName}] has refreshed JWT token.");
                 return Ok(new LoginResult
                 {
-                    UserName = userName,
-                    Role = User.FindFirst(ClaimTypes.Role)?.Value ?? string.Empty,
-                    AccessToken = jwtResult.AccessToken,
-                    RefreshToken = jwtResult.RefreshToken.TokenString
+                    user_name = userName,
+                    role = User.FindFirst(ClaimTypes.Role)?.Value ?? string.Empty,
+                    access_token = jwtResult.access_token,
+                    refresh_token = jwtResult.refresh_token.token_string
                 });
             }
             catch (SecurityTokenException e)

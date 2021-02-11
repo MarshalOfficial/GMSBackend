@@ -3,20 +3,11 @@
 namespace GMSBackend.Infrastructure
 {
     public class JwtTokenConfig
-    {
-        [JsonPropertyName("secret")]
-        public string Secret { get; set; }
-
-        [JsonPropertyName("issuer")]
-        public string Issuer { get; set; }
-
-        [JsonPropertyName("audience")]
-        public string Audience { get; set; }
-
-        [JsonPropertyName("accessTokenExpiration")]
-        public int AccessTokenExpiration { get; set; }
-
-        [JsonPropertyName("refreshTokenExpiration")]
-        public int RefreshTokenExpiration { get; set; }
+    {        
+        public string secret { get; set; }        
+        public string issuer { get; set; }      
+        public string audience { get; set; }        
+        public int access_token_expiration { get; set; }        
+        public int refresh_token_expiration { get; set; }
     }
 }

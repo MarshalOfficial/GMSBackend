@@ -9,69 +9,69 @@ namespace GMSBackend.Models
     public class SaleInvoiceReportModel
     {
         //header
-        public long ID { get; set; }
-        public DateTime InvDate { get; set; }
-        public long AccountID { get; set; }        
+        public long id { get; set; }
+        public DateTime inv_date { get; set; }
+        public long account_id { get; set; }        
 
-        public long? VisitorID { get; set; }
+        public long? visitor_id { get; set; }
 
-        public short InvType { get; set; }
+        public short inv_type { get; set; }
 
-        public double? Price { get; set; }
+        public double? price { get; set; }
 
-        public double? Reduction { get; set; }
+        public double? reduction { get; set; }
 
-        public string Memo { get; set; }
+        public string memo { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public DateTime create_date { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool is_deleted { get; set; }
 
-        public string InvDateFa
+        public string inv_date_fa
         {
             get
             {
-                var str = new PersianDateTime(InvDate);
+                var str = new PersianDateTime(inv_date);
                 return str.ToString();
             }
         }
 
         //detail
-        public int ProductID { get; set; }
+        public int product_id { get; set; }
 
-        public string ProductName { get; set; }
+        public string product_name { get; set; }
 
-        public int Qty { get; set; }
+        public int qty { get; set; }
 
-        public double ProductPrice { get; set; }    
+        public double product_price { get; set; }    
 
-        public short? Reduction_Percent { get; set; }
+        public short? reduction_percent { get; set; }
 
-        public double? Reduction_Price { get; set; }
+        public double? reduction_price { get; set; }
         
-        public int SessionQty { get; set; }
+        public int session_qty { get; set; }
 
-        public int SessionReserved { get; set; }
+        public int session_reserved { get; set; }
 
-        public int SessionUsed { get; set; }
+        public int session_used { get; set; }
 
 
         //payment
-        public int SaleInvoicePaymentTypeId { get; set; }
+        public int sale_invoice_payment_type_id { get; set; }
 
-        public decimal PaymentPrice { get; set; }
+        public decimal payment_price { get; set; }
 
-        public string Description { get; set; }
+        public string description { get; set; }
 
         //Account
-        public string AccountTitle { get; set; }
+        public string account_title { get; set; }
 
-        public string FirstName { get; set; }
+        public string first_name { get; set; }
 
-        public string LastName { get; set; }
+        public string last_name { get; set; }
 
         //payment type
-        public string PaymentTypeTitle { get; set; }    
+        public string payment_type_title { get; set; }    
 
     }
 }

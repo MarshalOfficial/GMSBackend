@@ -4,22 +4,22 @@ namespace GMSBackend.Models
 {
     public class LoginResult
     {
-        [JsonPropertyName("userid")]
-        public string UserID { get; set; }
+        
+        public string user_id { get; set; }
 
-        [JsonPropertyName("username")]
-        public string UserName { get; set; }
+        
+        public string user_name { get; set; }
 
-        [JsonPropertyName("role")]
-        public string Role { get; set; }
+        
+        public string role { get; set; }
 
-        [JsonPropertyName("originalUserName")]
-        public string OriginalUserName { get; set; }
+        
+        public string original_user_name { get; set; }
 
-        [JsonPropertyName("accessToken")]
-        public string AccessToken { get; set; }
+        
+        public string access_token { get; set; }
 
-        [JsonPropertyName("refreshToken")]
-        public string RefreshToken { get; set; }
+        
+        public string refresh_token { get; set; }
     }
 }

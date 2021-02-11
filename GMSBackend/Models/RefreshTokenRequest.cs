@@ -4,7 +4,7 @@ namespace GMSBackend.Models
 {
     public class RefreshTokenRequest
     {
-        [JsonPropertyName("refreshToken")]
-        public string RefreshToken { get; set; }
+        
+        public string refresh_token { get; set; }
     }
 }

@@ -4,7 +4,6 @@ namespace GMSBackend.Models
 {
     public class ImpersonationRequest
     {
-        [JsonPropertyName("username")]
-        public string UserName { get; set; }
+        public string user_name { get; set; }
     }
 }

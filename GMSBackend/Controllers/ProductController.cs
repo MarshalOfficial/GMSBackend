@@ -24,7 +24,7 @@ namespace GMSBackend.Controllers
         }
 
         [HttpPost("addProduct")]
-        public async Task<ActionResult> AddProduct([FromBody] ProductMain request)
+        public async Task<ActionResult> AddProduct([FromBody] Product request)
         {
             try
             {
@@ -33,21 +33,21 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                request.CreateDate = DateTime.Now;
-                request.IsActive = true;
-                request.IsDeleted = false;
-                request.CodingID = 1;
+                request.create_date = DateTime.Now;
+                request.is_active = true;
+                request.is_deleted = false;
+                request.coding_id = 1;
 
-                await _dBRepository.ProductMains.AddAsync(request);
+                await _dBRepository.product.AddAsync(request);
                 await _dBRepository.SaveChangesAsync();
 
 
-                return Ok(new CoreResponse() { isSuccess = true, data = request });
+                return Ok(new CoreResponse() { is_success = true, data = request });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -61,14 +61,14 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var lst = await _dBRepository.ProductMains.Where(l => l.IsDeleted == false).AsNoTracking().ToListAsync();
+                var lst = await _dBRepository.product.Where(l => l.is_deleted == false).AsNoTracking().ToListAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+                return Ok(new CoreResponse() { is_success = true, data = lst });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -83,19 +83,19 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var cus = await _dBRepository.ProductMains.Where(l => l.ID == ID).AsNoTracking().FirstOrDefaultAsync();
+                var cus = await _dBRepository.product.Where(l => l.id == ID).AsNoTracking().FirstOrDefaultAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = cus });
+                return Ok(new CoreResponse() { is_success = true, data = cus });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
         [HttpPut("updateProduct")]  
-        public async Task<ActionResult> UpdateProduct([FromBody] ProductMain product)
+        public async Task<ActionResult> UpdateProduct([FromBody] Product product)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var obj = await _dBRepository.ProductMains.Where(l => l.ID == product.ID).FirstOrDefaultAsync();
+                var obj = await _dBRepository.product.Where(l => l.id == product.id).FirstOrDefaultAsync();
                 if (obj == null)
                 {
                     throw new Exception("there is no product with this id that passed in.");
@@ -119,12 +119,12 @@ namespace GMSBackend.Controllers
 
                 await _dBRepository.SaveChangesAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = obj });
+                return Ok(new CoreResponse() { is_success = true, data = obj });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -139,21 +139,21 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var obj = await _dBRepository.ProductMains.Where(l => l.ID == id).FirstOrDefaultAsync();
+                var obj = await _dBRepository.product.Where(l => l.id == id).FirstOrDefaultAsync();
                 if (obj == null)
                 {
                     throw new Exception("there is no product with this id that passed in.");
                 }
-                obj.IsDeleted = true;
+                obj.is_deleted = true;
                 await _dBRepository.SaveChangesAsync();
 
 
-                return Ok(new CoreResponse() { isSuccess = true, data = obj });
+                return Ok(new CoreResponse() { is_success = true, data = obj });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
     }

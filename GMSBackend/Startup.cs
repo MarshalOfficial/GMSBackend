@@ -54,10 +54,10 @@ namespace GMSBackend
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = jwtTokenConfig.Issuer,
+                    ValidIssuer = jwtTokenConfig.issuer,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtTokenConfig.Secret)),
-                    ValidAudience = jwtTokenConfig.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtTokenConfig.secret)),
+                    ValidAudience = jwtTokenConfig.audience,
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero

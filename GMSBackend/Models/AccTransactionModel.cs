@@ -4,20 +4,20 @@ namespace GMSBackend.Models
 {
     public class AccTransactionModel
     {
-        public bool IsVariz { get; set; }
+        public bool is_variz { get; set; }
 
-        public int AccountTypeID { get; set; }
+        public int account_type_id { get; set; }
         
-        public long AccountID { get; set; }
+        public long account_id { get; set; }
         
-        public decimal Price { get; set; }
+        public decimal price { get; set; }
 
-        public string Description { get; set; }
+        public string description { get; set; }
 
-        public long UserID { get; set; }
+        public long user_id { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public DateTime create_date { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool is_deleted { get; set; }
     }
 }

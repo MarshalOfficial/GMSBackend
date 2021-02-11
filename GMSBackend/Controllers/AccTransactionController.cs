@@ -41,33 +41,33 @@ namespace GMSBackend.Controllers
                 }));
                 mapper.Map(requestobj, request);
 
-                request.CreateDate = DateTime.Now;
-                request.IsDeleted = false;
+                request.create_date = DateTime.Now;
+                request.is_deleted = false;
 
-                if (request.UserID == 0)
+                if (request.user_id == 0)
                     throw new Exception("کاربر ثبت کننده مشخص نشده است");
 
-                if (request.Price == 0)
+                if (request.price == 0)
                     throw new Exception("امکان ثبت تراکنش با مبلغ 0 وجود ندارد");
 
-                if (request.AccountTypeID == 0)
+                if (request.account_type_id == 0)
                     throw new Exception("نوع حساب را مشخص کنید");
 
-                if (request.AccountID == 0)
+                if (request.account_id == 0)
                     throw new Exception("حساب مدنظر را انتخاب کنید");
 
 
-                await _dBRepository.AccTransactions.AddAsync(request);
+                await _dBRepository.acc_transactions.AddAsync(request);
                 await _dBRepository.SaveChangesAsync();
 
                 ///////////////todo update customer balance
 
-                return Ok(new CoreResponse() { isSuccess = true, data = request });
+                return Ok(new CoreResponse() { is_success = true, data = request });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -81,21 +81,21 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var obj = await _dBRepository.AccTransactions.Where(l => l.Id == id).FirstOrDefaultAsync();
+                var obj = await _dBRepository.acc_transactions.Where(l => l.id == id).FirstOrDefaultAsync();
                 if (obj == null)
                 {
                     throw new Exception("there is no acc transaction with this id that passed in.");
                 }
-                obj.IsDeleted = true;
+                obj.is_deleted = true;
                 await _dBRepository.SaveChangesAsync();
 
 
-                return Ok(new CoreResponse() { isSuccess = true, data = obj });
+                return Ok(new CoreResponse() { is_success = true, data = obj });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -109,7 +109,7 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var lst = await _dBRepository.AccTransactions.Where(l => l.IsDeleted == false).Include(x => x.Account).Include(p => p.AccountType).AsNoTracking().ToListAsync();
+                var lst = await _dBRepository.acc_transactions.Where(l => l.is_deleted == false).Include(x => x.account).Include(p => p.account_type).AsNoTracking().ToListAsync();
 
                 var result = new List<AccTransactionViewModel>();
 
@@ -119,12 +119,12 @@ namespace GMSBackend.Controllers
                 }));
                 mapper.Map(lst, result);
 
-                return Ok(new CoreResponse() { isSuccess = true, data = result });
+                return Ok(new CoreResponse() { is_success = true, data = result });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -139,7 +139,7 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var cus = await _dBRepository.AccTransactions.Where(l => l.Id == ID).Include(x => x.Account).Include(p => p.AccountType).AsNoTracking().FirstOrDefaultAsync();
+                var cus = await _dBRepository.acc_transactions.Where(l => l.id == ID).Include(x => x.account).Include(p => p.account_type).AsNoTracking().FirstOrDefaultAsync();
 
                 var result = new AccTransactionViewModel();
 
@@ -149,12 +149,12 @@ namespace GMSBackend.Controllers
                 }));
                 mapper.Map(cus, result);
 
-                return Ok(new CoreResponse() { isSuccess = true, data = result });
+                return Ok(new CoreResponse() { is_success = true, data = result });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -169,14 +169,14 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var lst = await _dBRepository.AccountTypes.AsNoTracking().ToListAsync();
+                var lst = await _dBRepository.account_types.AsNoTracking().ToListAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+                return Ok(new CoreResponse() { is_success = true, data = lst });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -190,14 +190,14 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var lst = await _dBRepository.Accounts.Where(p=>p.AccountTypeId == AccountTypeID && p.IsDeleted == false).AsNoTracking().ToListAsync();
+                var lst = await _dBRepository.accounts.Where(p=>p.account_type_id == AccountTypeID && p.is_deleted == false).AsNoTracking().ToListAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+                return Ok(new CoreResponse() { is_success = true, data = lst });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
     }

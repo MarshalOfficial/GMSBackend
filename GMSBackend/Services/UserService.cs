@@ -37,32 +37,32 @@ namespace GMSBackend.Services
                 return false;
             }
 
-            return _dBRepository.Users.FirstOrDefault(l => l.UserName == userName && l.Password == password) != null;
+            return _dBRepository.users.FirstOrDefault(l => l.user_name == userName && l.password == password) != null;
         }
 
         public bool IsAnExistingUser(string userName)
         {
-            return _dBRepository.Users.FirstOrDefault(l => l.UserName == userName) != null;
+            return _dBRepository.users.FirstOrDefault(l => l.user_name == userName) != null;
         }
 
         public string GetUserRole(string userName)
         {
 
-            var user = _dBRepository.Users.FirstOrDefault(l => l.UserName == userName);
+            var user = _dBRepository.users.FirstOrDefault(l => l.user_name == userName);
 
             if (user == null)
             {
                 return string.Empty;
             }
 
-            return GetRole(user.UserRoleId);
+            return GetRole(user.user_role_id);
 
         }
 
         public Tuple<int, string> GetUserIDAndRole(string userName)
         {
 
-            var user = _dBRepository.Users.FirstOrDefault(l => l.UserName == userName);
+            var user = _dBRepository.users.FirstOrDefault(l => l.user_name == userName);
             var result = new Tuple<int, string>(0, string.Empty);
 
             if (user == null)
@@ -70,7 +70,7 @@ namespace GMSBackend.Services
                 return result;
             }
 
-            return new Tuple<int, string>(user.Id, GetRole(user.UserRoleId));
+            return new Tuple<int, string>(user.id, GetRole(user.user_role_id));
         }
 
         private string GetRole(int roleid)

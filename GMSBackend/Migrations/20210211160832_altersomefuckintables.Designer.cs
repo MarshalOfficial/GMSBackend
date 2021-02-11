@@ -3,15 +3,17 @@ using System;
 using GMSBackend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GMSBackend.Migrations
 {
     [DbContext(typeof(DBRepository))]
-    partial class DBRepositoryModelSnapshot : ModelSnapshot
+    [Migration("20210211160832_altersomefuckintables")]
+    partial class altersomefuckintables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -500,47 +502,47 @@ namespace GMSBackend.Migrations
 
             modelBuilder.Entity("GMSBackend.Entities.User", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("password")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("user_name")
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<int>("user_role_id")
+                    b.Property<int>("UserRoleId")
                         .HasColumnType("integer");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("user_name")
+                    b.HasIndex("UserName")
                         .IsUnique();
 
-                    b.ToTable("users");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.UserRole", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("title")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.ToTable("user_roles");
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.AccTransaction", b =>

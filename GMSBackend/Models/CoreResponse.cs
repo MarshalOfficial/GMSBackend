@@ -2,9 +2,9 @@
 {
     public class CoreResponse
     {
-        public bool isSuccess { get; set; }
-        public string userMessage { get; set; }
-        public string devMessage { get; set; }
+        public bool is_success { get; set; }
+        public string user_message { get; set; }
+        public string dev_message { get; set; }
         public object data { get; set; }
     }
 }

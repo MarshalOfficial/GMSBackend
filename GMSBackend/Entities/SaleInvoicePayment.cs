@@ -11,22 +11,22 @@ namespace GMSBackend.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long ID { get; set; }
+        public long id { get; set; }
 
-        public long InvoiceID { get; set; }
+        public long invoice_id { get; set; }
 
-        [ForeignKey("InvoiceID")] 
-        public SaleInvoiceHeader SaleInvoiceHeader { get; set; }
+        [ForeignKey("invoice_id")] 
+        public SaleInvoiceHeader sale_invoice_header { get; set; }
 
-        public int SaleInvoicePaymentTypeId { get; set; }
+        public int sale_invoice_payment_type_id { get; set; }
 
-        [ForeignKey("SaleInvoicePaymentTypeId")]
-        public SaleInvoicePaymentType SaleInvoicePaymentType { get; set; }
+        [ForeignKey("sale_invoice_payment_type_id")]
+        public SaleInvoicePaymentType sale_invoice_payment_type { get; set; }
 
-        public decimal Price { get; set; }
+        public decimal price { get; set; }
 
-        public string Description { get; set; }
+        public string description { get; set; }
 
-        public DateTime CreateDate { get; set; }    
+        public DateTime create_date { get; set; }    
     }
 }

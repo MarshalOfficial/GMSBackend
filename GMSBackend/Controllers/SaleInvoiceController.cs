@@ -37,44 +37,44 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                request.CreateDate = request.InvDate = DateTime.Now;
+                request.create_date = request.inv_date = DateTime.Now;
                 
-                if(request.SaleInvoiceDetails == null || request.SaleInvoiceDetails.Count == 0)
+                if(request.sale_invoice_details == null || request.sale_invoice_details.Count == 0)
                 {
                     throw new Exception("SaleInvoiceDetails is empty, can not add invoice without details(products).");
                 }
-                if (request.AccountID == 0 || !(await _dBRepository.Accounts.AnyAsync(p => p.Id == request.AccountID)))
+                if (request.account_id == 0 || !(await _dBRepository.accounts.AnyAsync(p => p.id == request.account_id)))
                 {
                     throw new Exception("Customer is not valid, check AccountID value plz.");
                 }
-                request.Price = request.SaleInvoiceDetails.Sum(l => l.Price * l.Qty);
-                request.Reduction = request.SaleInvoiceDetails.Sum(l => l.Reduction_Price * l.Qty);
+                request.price = request.sale_invoice_details.Sum(l => l.price * l.qty);
+                request.reduction = request.sale_invoice_details.Sum(l => l.reduction_price * l.qty);
 
-                await _dBRepository.SaleInvoiceHeaders.AddAsync(request);
+                await _dBRepository.sale_invoice_headers.AddAsync(request);
                 await _dBRepository.SaveChangesAsync();
 
                 var acctrans = new AccTransaction()
                 {
-                    AccountID = request.AccountID,
-                    InvoiceID = request.ID,
-                    AccountTypeID = 9,
-                    IsVariz = true,
-                    Price = request.SaleInvoicePayments.Sum(l => l.Price),
-                    CreateDate = DateTime.Now,
-                    Description = "ثبت اتومات از فاکتور فروش"
+                    account_id = request.account_id,
+                    invoice_id = request.id,
+                    account_type_id = 9,
+                    is_variz = true,
+                    price = request.sale_invoice_payments.Sum(l => l.price),
+                    create_date = DateTime.Now,
+                    description = "ثبت اتومات از فاکتور فروش"
                 };
                 
                 ///////////////todo update customer balance
                 
-                await _dBRepository.AccTransactions.AddAsync(acctrans);
+                await _dBRepository.acc_transactions.AddAsync(acctrans);
                 await _dBRepository.SaveChangesAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = request });
+                return Ok(new CoreResponse() { is_success = true, data = request });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -101,11 +101,11 @@ namespace GMSBackend.Controllers
                     "where h.\"IsDeleted\" = '0' and d.\"IsDeleted\" = '0' ";
                 
                 var lst = await _dBDapperRepository.RunQueryAsync<SaleInvoiceReportModel>(query);               
-                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+                return Ok(new CoreResponse() { is_success = true, data = lst });
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -119,21 +119,21 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var obj = await _dBRepository.SaleInvoiceHeaders.Where(l => l.ID == id).FirstOrDefaultAsync();
+                var obj = await _dBRepository.sale_invoice_headers.Where(l => l.id == id).FirstOrDefaultAsync();
                 if (obj == null)
                 {
                     throw new Exception("there is no SaleInvoice with this id that passed in.");
                 }
-                obj.IsDeleted = true;
+                obj.is_deleted = true;
                 await _dBRepository.SaveChangesAsync();
 
 
-                return Ok(new CoreResponse() { isSuccess = true, data = obj });
+                return Ok(new CoreResponse() { is_success = true, data = obj });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -147,14 +147,14 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var lst = await _dBRepository.SaleInvoicePaymentTypes.AsNoTracking().ToListAsync();
+                var lst = await _dBRepository.sale_invoice_payment_types.AsNoTracking().ToListAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+                return Ok(new CoreResponse() { is_success = true, data = lst });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
     }

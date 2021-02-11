@@ -8,12 +8,12 @@ namespace GMSBackend.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long ID { get; set; }
+        public long id { get; set; }
 
-        public string Title { get; set; }
+        public string title { get; set; }
 
-        public long? CodingParent_ID { get; set; }
+        public long? coding_parent_id { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public DateTime create_date { get; set; }   
     }
 }

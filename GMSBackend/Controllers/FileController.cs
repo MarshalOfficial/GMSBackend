@@ -25,21 +25,21 @@ namespace GMSBackend.Controllers
                 {
                     Directory.CreateDirectory(storage);
                 }
-                if (file.FormFile.Length > 0)
+                if (file.form_file.Length > 0)
                 {
-                    var filePath = Path.Combine(storage, file.FileName);
+                    var filePath = Path.Combine(storage, file.file_name);
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                        await file.FormFile.CopyToAsync(fileStream);
+                        await file.form_file.CopyToAsync(fileStream);
                     }
                 }
 
 
-                return new CoreResponse() { isSuccess = true, data = file };
+                return new CoreResponse() { is_success = true, data = file };
             }
             catch (Exception ex)
             {
-                return new CoreResponse() { isSuccess = false, data = file, devMessage = ex.Message };
+                return new CoreResponse() { is_success = false, data = file, dev_message = ex.Message };
             }
         }
 
@@ -65,7 +65,7 @@ namespace GMSBackend.Controllers
             }
             catch (Exception ex)
             {
-                return new CoreResponse() { isSuccess = false, devMessage = ex.Message };
+                return new CoreResponse() { is_success = false, dev_message = ex.Message };
             }
         }
 

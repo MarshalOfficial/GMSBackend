@@ -3,15 +3,17 @@ using System;
 using GMSBackend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GMSBackend.Migrations
 {
     [DbContext(typeof(DBRepository))]
-    partial class DBRepositoryModelSnapshot : ModelSnapshot
+    [Migration("20210211152736_alteraccounttable")]
+    partial class alteraccounttable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,56 +23,50 @@ namespace GMSBackend.Migrations
 
             modelBuilder.Entity("GMSBackend.Entities.AccTransaction", b =>
                 {
-                    b.Property<long>("id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<long?>("AccountID")
+                    b.Property<long>("AccountID")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("AccountTypeID")
+                    b.Property<int>("AccountTypeID")
                         .HasColumnType("integer");
 
-                    b.Property<long>("account_id")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("account_type_id")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("create_date")
+                    b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW()");
 
-                    b.Property<DateTime?>("deleted_date")
+                    b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("description")
+                    b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<long?>("invoice_id")
+                    b.Property<long?>("InvoiceID")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("is_deleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("is_variz")
+                    b.Property<bool>("IsVariz")
                         .HasColumnType("boolean");
 
-                    b.Property<decimal>("price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<long>("user_id")
+                    b.Property<long>("UserID")
                         .HasColumnType("bigint");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.HasIndex("AccountID");
 
                     b.HasIndex("AccountTypeID");
 
-                    b.ToTable("acc_transactions");
+                    b.ToTable("AccTransactions");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.Account", b =>
@@ -162,456 +158,460 @@ namespace GMSBackend.Migrations
 
             modelBuilder.Entity("GMSBackend.Entities.AccountType", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("title")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.ToTable("account_types");
+                    b.ToTable("AccountTypes");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.ClientPeriodicCheckUp", b =>
                 {
-                    b.Property<long>("id")
+                    b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<double?>("abs")
+                    b.Property<double?>("ABS")
                         .HasColumnType("double precision");
 
-                    b.Property<long>("account_id")
+                    b.Property<long>("AccountID")
                         .HasColumnType("bigint");
 
-                    b.Property<double?>("butt")
+                    b.Property<double?>("BUTT")
                         .HasColumnType("double precision");
 
-                    b.Property<double?>("chest")
+                    b.Property<double?>("Chest")
                         .HasColumnType("double precision");
 
-                    b.Property<DateTime>("create_date")
+                    b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW()");
 
-                    b.Property<double?>("height")
+                    b.Property<double?>("Height")
                         .HasColumnType("double precision");
 
-                    b.Property<string>("img_url")
+                    b.Property<string>("ImgUrl")
                         .HasColumnType("text");
 
-                    b.Property<bool>("is_deleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<double?>("left_arm")
+                    b.Property<double?>("LeftArm")
                         .HasColumnType("double precision");
 
-                    b.Property<double?>("left_calves")
+                    b.Property<double?>("LeftCalves")
                         .HasColumnType("double precision");
 
-                    b.Property<double?>("left_thigh")
+                    b.Property<double?>("LeftThigh")
                         .HasColumnType("double precision");
 
-                    b.Property<double?>("right_arm")
+                    b.Property<double?>("RightArm")
                         .HasColumnType("double precision");
 
-                    b.Property<double?>("right_calves")
+                    b.Property<double?>("RightCalves")
                         .HasColumnType("double precision");
 
-                    b.Property<double?>("right_thigh")
+                    b.Property<double?>("RightThigh")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("session_no")
+                    b.Property<int>("SessionNo")
                         .HasColumnType("integer");
 
-                    b.Property<double?>("waist_size")
+                    b.Property<double?>("WaistSize")
                         .HasColumnType("double precision");
 
-                    b.Property<double?>("weight")
+                    b.Property<double?>("Weight")
                         .HasColumnType("double precision");
 
-                    b.HasKey("id");
+                    b.HasKey("ID");
 
-                    b.ToTable("client_periodic_checkups");
+                    b.ToTable("ClientPeriodicCheckUps");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.JobInfo", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("title")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.ToTable("job_infos");
+                    b.ToTable("JobInfos");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.MembershipJoinType", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("title")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.ToTable("membership_join_types");
-                });
-
-            modelBuilder.Entity("GMSBackend.Entities.Product", b =>
-                {
-                    b.Property<long>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<double?>("buy_price")
-                        .HasColumnType("double precision");
-
-                    b.Property<long>("coding_id")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("create_date")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.Property<DateTime?>("end_date")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("is_active")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("is_deleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("product_barcode")
-                        .HasColumnType("text");
-
-                    b.Property<string>("product_code")
-                        .HasColumnType("text");
-
-                    b.Property<string>("product_name")
-                        .HasColumnType("text");
-
-                    b.Property<double?>("sale_price")
-                        .HasColumnType("double precision");
-
-                    b.Property<double?>("sale_price2")
-                        .HasColumnType("double precision");
-
-                    b.Property<int?>("session_count")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("start_date")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("id");
-
-                    b.ToTable("product");
+                    b.ToTable("MembershipJoinTypes");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.ProductCodingInfo", b =>
                 {
-                    b.Property<long>("id")
+                    b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<long?>("coding_parent_id")
+                    b.Property<long?>("CodingParent_ID")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("create_date")
+                    b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW()");
 
-                    b.Property<string>("title")
+                    b.Property<string>("Title")
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.HasKey("ID");
 
-                    b.ToTable("product_coding_infos");
+                    b.ToTable("ProductCodingInfos");
+                });
+
+            modelBuilder.Entity("GMSBackend.Entities.ProductMain", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<double?>("BuyPrice")
+                        .HasColumnType("double precision");
+
+                    b.Property<long>("CodingID")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ProductBarCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProductCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("text");
+
+                    b.Property<double?>("SalePrice")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("SalePrice2")
+                        .HasColumnType("double precision");
+
+                    b.Property<int?>("SessionCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ProductMains");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.SaleInvoiceDetails", b =>
                 {
-                    b.Property<long>("id")
+                    b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<DateTime>("create_date")
+                    b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW()");
 
-                    b.Property<long>("invoice_id")
+                    b.Property<long>("InvoiceID")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("is_deleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("memo")
+                    b.Property<string>("Memo")
                         .HasColumnType("text");
 
-                    b.Property<double>("price")
+                    b.Property<double>("Price")
                         .HasColumnType("double precision");
 
-                    b.Property<long>("product_id")
+                    b.Property<long>("ProductID")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("product_name")
+                    b.Property<string>("ProductName")
                         .HasColumnType("text");
 
-                    b.Property<int>("qty")
+                    b.Property<int>("Qty")
                         .HasColumnType("integer");
 
-                    b.Property<short?>("reduction_percent")
+                    b.Property<short?>("Reduction_Percent")
                         .HasColumnType("smallint");
 
-                    b.Property<double?>("reduction_price")
+                    b.Property<double?>("Reduction_Price")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("session_qty")
+                    b.Property<int>("SessionQty")
                         .HasColumnType("integer");
 
-                    b.Property<int>("session_reserved")
+                    b.Property<int>("SessionReserved")
                         .HasColumnType("integer");
 
-                    b.Property<int>("session_used")
+                    b.Property<int>("SessionUsed")
                         .HasColumnType("integer");
 
-                    b.HasKey("id");
+                    b.HasKey("ID");
 
-                    b.HasIndex("invoice_id");
+                    b.HasIndex("InvoiceID");
 
-                    b.HasIndex("product_id");
+                    b.HasIndex("ProductID");
 
-                    b.ToTable("sale_invoice_details");
+                    b.ToTable("SaleInvoiceDetails");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.SaleInvoiceHeader", b =>
                 {
-                    b.Property<long>("id")
+                    b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<long>("account_id")
+                    b.Property<long>("AccountID")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("create_date")
+                    b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW()");
 
-                    b.Property<DateTime>("inv_date")
+                    b.Property<DateTime>("InvDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<short>("inv_type")
+                    b.Property<short>("InvType")
                         .HasColumnType("smallint");
 
-                    b.Property<bool>("is_deleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("memo")
+                    b.Property<string>("Memo")
                         .HasColumnType("text");
 
-                    b.Property<double?>("price")
+                    b.Property<double?>("Price")
                         .HasColumnType("double precision");
 
-                    b.Property<double?>("reduction")
+                    b.Property<double?>("Reduction")
                         .HasColumnType("double precision");
 
-                    b.Property<long?>("visitor_id")
+                    b.Property<long?>("VisitorID")
                         .HasColumnType("bigint");
 
-                    b.HasKey("id");
+                    b.HasKey("ID");
 
-                    b.HasIndex("account_id");
+                    b.HasIndex("AccountID");
 
-                    b.ToTable("sale_invoice_headers");
+                    b.ToTable("SaleInvoiceHeaders");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.SaleInvoicePayment", b =>
                 {
-                    b.Property<long>("id")
+                    b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<DateTime>("create_date")
+                    b.Property<DateTime>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("description")
+                    b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<long>("invoice_id")
+                    b.Property<long>("InvoiceID")
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("sale_invoice_payment_type_id")
+                    b.Property<int>("SaleInvoicePaymentTypeId")
                         .HasColumnType("integer");
 
-                    b.HasKey("id");
+                    b.HasKey("ID");
 
-                    b.HasIndex("invoice_id");
+                    b.HasIndex("InvoiceID");
 
-                    b.HasIndex("sale_invoice_payment_type_id");
+                    b.HasIndex("SaleInvoicePaymentTypeId");
 
-                    b.ToTable("sale_invoice_payments");
+                    b.ToTable("SaleInvoicePayments");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.SaleInvoicePaymentType", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("title")
+                    b.Property<string>("Title")
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.ToTable("sale_invoice_payment_types");
+                    b.ToTable("SaleInvoicePaymentTypes");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.User", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("password")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("user_name")
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<int>("user_role_id")
+                    b.Property<int>("UserRoleId")
                         .HasColumnType("integer");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("user_name")
+                    b.HasIndex("UserName")
                         .IsUnique();
 
-                    b.ToTable("users");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.UserRole", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("title")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.ToTable("user_roles");
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.AccTransaction", b =>
                 {
-                    b.HasOne("GMSBackend.Entities.Account", "account")
+                    b.HasOne("GMSBackend.Entities.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountID");
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("GMSBackend.Entities.AccountType", "account_type")
+                    b.HasOne("GMSBackend.Entities.AccountType", "AccountType")
                         .WithMany()
-                        .HasForeignKey("AccountTypeID");
+                        .HasForeignKey("AccountTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("account");
+                    b.Navigation("Account");
 
-                    b.Navigation("account_type");
+                    b.Navigation("AccountType");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.SaleInvoiceDetails", b =>
                 {
-                    b.HasOne("GMSBackend.Entities.SaleInvoiceHeader", "sale_invoice_header")
-                        .WithMany("sale_invoice_details")
-                        .HasForeignKey("invoice_id")
+                    b.HasOne("GMSBackend.Entities.SaleInvoiceHeader", "SaleInvoiceHeader")
+                        .WithMany("SaleInvoiceDetails")
+                        .HasForeignKey("InvoiceID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GMSBackend.Entities.Product", "product")
+                    b.HasOne("GMSBackend.Entities.ProductMain", "ProductMain")
                         .WithMany()
-                        .HasForeignKey("product_id")
+                        .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("product");
+                    b.Navigation("ProductMain");
 
-                    b.Navigation("sale_invoice_header");
+                    b.Navigation("SaleInvoiceHeader");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.SaleInvoiceHeader", b =>
                 {
-                    b.HasOne("GMSBackend.Entities.Account", "account")
+                    b.HasOne("GMSBackend.Entities.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("account_id")
+                        .HasForeignKey("AccountID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("account");
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.SaleInvoicePayment", b =>
                 {
-                    b.HasOne("GMSBackend.Entities.SaleInvoiceHeader", "sale_invoice_header")
-                        .WithMany("sale_invoice_payments")
-                        .HasForeignKey("invoice_id")
+                    b.HasOne("GMSBackend.Entities.SaleInvoiceHeader", "SaleInvoiceHeader")
+                        .WithMany("SaleInvoicePayments")
+                        .HasForeignKey("InvoiceID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GMSBackend.Entities.SaleInvoicePaymentType", "sale_invoice_payment_type")
+                    b.HasOne("GMSBackend.Entities.SaleInvoicePaymentType", "SaleInvoicePaymentType")
                         .WithMany()
-                        .HasForeignKey("sale_invoice_payment_type_id")
+                        .HasForeignKey("SaleInvoicePaymentTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("sale_invoice_header");
+                    b.Navigation("SaleInvoiceHeader");
 
-                    b.Navigation("sale_invoice_payment_type");
+                    b.Navigation("SaleInvoicePaymentType");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.SaleInvoiceHeader", b =>
                 {
-                    b.Navigation("sale_invoice_details");
+                    b.Navigation("SaleInvoiceDetails");
 
-                    b.Navigation("sale_invoice_payments");
+                    b.Navigation("SaleInvoicePayments");
                 });
 #pragma warning restore 612, 618
         }

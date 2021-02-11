@@ -35,19 +35,19 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                request.CreateDate = DateTime.Now;
-                request.JoinDate = DateTime.Now;
-                request.AccountTypeId = 1; 
-                await _dBRepository.Accounts.AddAsync(request);
+                request.create_date = DateTime.Now;
+                request.join_date = DateTime.Now;
+                request.account_type_id = 1; 
+                await _dBRepository.accounts.AddAsync(request);
                 await _dBRepository.SaveChangesAsync();
 
 
-                return Ok(new CoreResponse() { isSuccess = true, data = request });
+                return Ok(new CoreResponse() { is_success = true, data = request });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -62,14 +62,14 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var lst = await _dBRepository.JobInfos.AsNoTracking().ToListAsync();
+                var lst = await _dBRepository.job_infos.AsNoTracking().ToListAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+                return Ok(new CoreResponse() { is_success = true, data = lst });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -83,20 +83,20 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var lst = await _dBRepository.MembershipJoinTypes.AsNoTracking().ToListAsync(); 
+                var lst = await _dBRepository.membership_join_types.AsNoTracking().ToListAsync(); 
 
-                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+                return Ok(new CoreResponse() { is_success = true, data = lst });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
 
         [HttpGet("getCustomers")]        
-        public async Task<ActionResult> GetCustomers()
+        public async Task<ActionResult> GetCustomers(string first_name, string last_name, string mobile)
         {
             try
             {
@@ -104,15 +104,15 @@ namespace GMSBackend.Controllers
                 {
                     return BadRequest();
                 }
-
-                var lst = await _dBRepository.Accounts.Where(l => l.AccountTypeId == 1).AsNoTracking().ToListAsync();
                 
-                return Ok(new CoreResponse() { isSuccess = true, data = lst });
+                var lst = await _dBRepository.accounts.Where(l => l.account_type_id == 1).AsNoTracking().ToListAsync();
+                
+                return Ok(new CoreResponse() { is_success = true, data = lst });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -127,14 +127,14 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var cus = await _dBRepository.Accounts.Where(l => l.Id == ID).AsNoTracking().FirstOrDefaultAsync();
+                var cus = await _dBRepository.accounts.Where(l => l.id == ID).AsNoTracking().FirstOrDefaultAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = cus });
+                return Ok(new CoreResponse() { is_success = true, data = cus });
                 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null,devMessage=ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null,dev_message=ex.Message });
             }
         }
 
@@ -148,7 +148,7 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var cus = await _dBRepository.Accounts.Where(l => l.Id == customer.Id).FirstOrDefaultAsync();
+                var cus = await _dBRepository.accounts.Where(l => l.id == customer.id).FirstOrDefaultAsync();
                 if (cus == null)
                 {
                     throw new Exception("there is no customer with this id that passed in.");
@@ -163,12 +163,12 @@ namespace GMSBackend.Controllers
 
                 await _dBRepository.SaveChangesAsync();
 
-                return Ok(new CoreResponse() { isSuccess = true, data = cus });
+                return Ok(new CoreResponse() { is_success = true, data = cus });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
         #endregion
@@ -185,22 +185,22 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                request.CreateDate = DateTime.Now;
-                request.IsDeleted = false;
+                request.create_date = DateTime.Now;
+                request.is_deleted = false;
 
-                if (!await _dBRepository.Accounts.AnyAsync(p => p.Id == request.AccountID))
-                    throw new Exception("there is not any Customer with AccountID = " + request.AccountID.ToString());
+                if (!await _dBRepository.accounts.AnyAsync(p => p.id == request.account_id))
+                    throw new Exception("there is not any Customer with AccountID = " + request.account_id.ToString());
                 
-                await _dBRepository.ClientPeriodicCheckUps.AddAsync(request);
+                await _dBRepository.client_periodic_checkups.AddAsync(request);
                 await _dBRepository.SaveChangesAsync();
 
 
-                return Ok(new CoreResponse() { isSuccess = true, data = request });
+                return Ok(new CoreResponse() { is_success = true, data = request });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -214,21 +214,21 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var obj = await _dBRepository.ClientPeriodicCheckUps.Where(l => l.ID == id).FirstOrDefaultAsync();
+                var obj = await _dBRepository.client_periodic_checkups.Where(l => l.id == id).FirstOrDefaultAsync();
                 if(obj == null)
                 {
                     throw new Exception("there is no clientCheckup with this id that passed in.");
                 }
-                obj.IsDeleted = true;
+                obj.is_deleted = true;
                 await _dBRepository.SaveChangesAsync();
 
 
-                return Ok(new CoreResponse() { isSuccess = true, data = obj });
+                return Ok(new CoreResponse() { is_success = true, data = obj });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 
@@ -242,7 +242,7 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var lst = await _dBRepository.ClientPeriodicCheckUps.Where(l => l.AccountID == customerid && l.IsDeleted == false).AsNoTracking().ToListAsync();
+                var lst = await _dBRepository.client_periodic_checkups.Where(l => l.account_id == customerid && l.is_deleted == false).AsNoTracking().ToListAsync();
 
                 var result = new List<ClientPeriodicCheckupModel>();
 
@@ -252,12 +252,12 @@ namespace GMSBackend.Controllers
                 }));
                 mapper.Map(lst, result);
 
-                return Ok(new CoreResponse() { isSuccess = true, data = result });
+                return Ok(new CoreResponse() { is_success = true, data = result });
 
             }
             catch (Exception ex)
             {
-                return Ok(new CoreResponse() { isSuccess = false, data = null, devMessage = ex.Message });
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
 

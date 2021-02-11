@@ -4,7 +4,7 @@ namespace GMSBackend.Models
 {
     public class FileModel
     {
-        public string FileName { get; set; }
-        public IFormFile FormFile { get; set; }
+        public string file_name { get; set; }
+        public IFormFile form_file { get; set; }
     }
 }

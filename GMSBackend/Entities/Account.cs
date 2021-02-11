@@ -9,58 +9,58 @@ namespace GMSBackend.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
+        public long id { get; set; }
 
 
-        public string Title { get; set; }
-
-        [Required]
-        [StringLength(100)]
-        public string FirstName { get; set; }
+        public string title { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string LastName { get; set; }
+        public string first_name { get; set; }
 
-        public DateTime? Birthdate { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string last_name { get; set; }
+
+        public DateTime? birth_date { get; set; }
 
         public bool? Gender { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public DateTime create_date { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string Mobile { get; set; }
+        public string mobile { get; set; }
 
-        public string Tel { get; set; }
+        public string tel { get; set; }
 
-        public string PostalCode { get; set; }
+        public string postal_code { get; set; }
 
-        public string Email { get; set; }
+        public string email { get; set; }
 
-        public string Telegram { get; set; }
+        public string telegram { get; set; }
 
-        public string Instagram { get; set; }
+        public string instagram { get; set; }
 
-        public string Address { get; set; }
+        public string address { get; set; }
 
-        public DateTime? JoinDate { get; set; }
+        public DateTime? join_date { get; set; }
 
-        public long? Referral { get; set; }
+        public long? referral { get; set; }
 
-        public long? VisitorID { get; set; }
-        public string FullName { get; set; }
-        public bool IsDeleted { get; set; }
+        public long? visitor_id { get; set; }
+        public string full_name { get; set; }   
+        public bool is_deleted { get; set; }
 
-        public int AccountTypeId { get; set; }
+        public int account_type_id { get; set; }
         
-        public int? MembershipJoinTypeId { get; set; }
+        public int? membership_join_type_id { get; set; }
         
-        public int? JobInfoId { get; set; }
+        public int? jobinfo_id { get; set; }
 
-        public string ContractFilePath { get; set; }
+        public string contract_file_path { get; set; }
 
-        public decimal Balance { get; set; }    
+        public decimal balance { get; set; }    
 
-    }
+    }   
 }

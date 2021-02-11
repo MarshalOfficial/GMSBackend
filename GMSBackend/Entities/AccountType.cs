@@ -7,11 +7,12 @@ namespace GMSBackend.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int id { get; set; }
 
         [Required]
         [StringLength(250)]
-        public string Title { get; set; }
+        public string title { get; set; }
 
     }
 }
+    

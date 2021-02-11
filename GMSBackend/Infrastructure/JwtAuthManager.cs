@@ -34,13 +34,13 @@ namespace GMSBackend.Infrastructure
         {
             _jwtTokenConfig = jwtTokenConfig;
             _usersRefreshTokens = new ConcurrentDictionary<string, RefreshToken>();
-            _secret = Encoding.ASCII.GetBytes(jwtTokenConfig.Secret);
+            _secret = Encoding.ASCII.GetBytes(jwtTokenConfig.secret);
         }
 
         // optional: clean up expired refresh tokens
         public void RemoveExpiredRefreshTokens(DateTime now)
         {
-            var expiredTokens = _usersRefreshTokens.Where(x => x.Value.ExpireAt < now).ToList();
+            var expiredTokens = _usersRefreshTokens.Where(x => x.Value.expire_at < now).ToList();
             foreach (var expiredToken in expiredTokens)
             {
                 _usersRefreshTokens.TryRemove(expiredToken.Key, out _);
@@ -50,7 +50,7 @@ namespace GMSBackend.Infrastructure
         // can be more specific to ip, user agent, device name, etc.
         public void RemoveRefreshTokenByUserName(string userName)
         {
-            var refreshTokens = _usersRefreshTokens.Where(x => x.Value.UserName == userName).ToList();
+            var refreshTokens = _usersRefreshTokens.Where(x => x.Value.user_name == userName).ToList();
             foreach (var refreshToken in refreshTokens)
             {
                 _usersRefreshTokens.TryRemove(refreshToken.Key, out _);
@@ -61,25 +61,25 @@ namespace GMSBackend.Infrastructure
         {
             var shouldAddAudienceClaim = string.IsNullOrWhiteSpace(claims?.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Aud)?.Value);
             var jwtToken = new JwtSecurityToken(
-                _jwtTokenConfig.Issuer,
-                shouldAddAudienceClaim ? _jwtTokenConfig.Audience : string.Empty,
+                _jwtTokenConfig.issuer,
+                shouldAddAudienceClaim ? _jwtTokenConfig.audience : string.Empty,
                 claims,
-                expires: now.AddDays(_jwtTokenConfig.AccessTokenExpiration),
+                expires: now.AddDays(_jwtTokenConfig.access_token_expiration),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(_secret), SecurityAlgorithms.HmacSha256Signature));
             var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
             var refreshToken = new RefreshToken
             {
-                UserName = username,
-                TokenString = GenerateRefreshTokenString(),
-                ExpireAt = now.AddDays(_jwtTokenConfig.RefreshTokenExpiration)
+                user_name = username,
+                token_string = GenerateRefreshTokenString(),
+                expire_at = now.AddDays(_jwtTokenConfig.refresh_token_expiration)
             };
-            _usersRefreshTokens.AddOrUpdate(refreshToken.TokenString, refreshToken, (s, t) => refreshToken);
+            _usersRefreshTokens.AddOrUpdate(refreshToken.token_string, refreshToken, (s, t) => refreshToken);
 
             return new JwtAuthResult
             {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken
+                access_token = accessToken,
+                refresh_token = refreshToken
             };
         }
 
@@ -96,7 +96,7 @@ namespace GMSBackend.Infrastructure
             {
                 throw new SecurityTokenException("Invalid token");
             }
-            if (existingRefreshToken.UserName != userName || existingRefreshToken.ExpireAt < now)
+            if (existingRefreshToken.user_name != userName || existingRefreshToken.expire_at < now)
             {
                 throw new SecurityTokenException("Invalid token");
             }
@@ -115,10 +115,10 @@ namespace GMSBackend.Infrastructure
                     new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = _jwtTokenConfig.Issuer,
+                        ValidIssuer = _jwtTokenConfig.issuer,
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(_secret),
-                        ValidAudience = _jwtTokenConfig.Audience,
+                        ValidAudience = _jwtTokenConfig.audience,
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero
@@ -137,24 +137,16 @@ namespace GMSBackend.Infrastructure
     }
 
     public class JwtAuthResult
-    {
-        [JsonPropertyName("accessToken")]
-        public string AccessToken { get; set; }
-
-        [JsonPropertyName("refreshToken")]
-        public RefreshToken RefreshToken { get; set; }
+    {        
+        public string access_token { get; set; }
+        public RefreshToken refresh_token { get; set; }
     }
 
     public class RefreshToken
     {
-        [JsonPropertyName("username")]
-        public string UserName { get; set; }    // can be used for usage tracking
-        // can optionally include other metadata, such as user agent, ip address, device name, and so on
-
-        [JsonPropertyName("tokenString")]
-        public string TokenString { get; set; }
-
-        [JsonPropertyName("expireAt")]
-        public DateTime ExpireAt { get; set; }
+        public string user_name { get; set; }    // can be used for usage tracking
+        // can optionally include other metadata, such as user agent, ip address, device name, and so on        
+        public string token_string { get; set; }        
+        public DateTime expire_at { get; set; }
     }
 }

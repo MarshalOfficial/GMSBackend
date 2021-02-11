@@ -6,53 +6,53 @@ namespace GMSBackend.Services
     public class DBRepository : DbContext
     {
         public DBRepository(DbContextOptions<DBRepository> options) : base(options) { }
-        public DbSet<AccountType> AccountTypes { get; set; }
-        public DbSet<MembershipJoinType> MembershipJoinTypes { get; set; }
-        public DbSet<JobInfo> JobInfos { get; set; }
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<ClientPeriodicCheckUp> ClientPeriodicCheckUps { get; set; }
-        public DbSet<ProductMain> ProductMains { get; set; }
-        public DbSet<ProductCodingInfo> ProductCodingInfos { get; set; }
-        public DbSet<SaleInvoiceHeader> SaleInvoiceHeaders { get; set; }
-        public DbSet<SaleInvoiceDetails> SaleInvoiceDetails { get; set; }
-        public DbSet<SaleInvoicePayment> SaleInvoicePayments { get; set; }
-        public DbSet<SaleInvoicePaymentType> SaleInvoicePaymentTypes { get; set; }
-        public DbSet<AccTransaction> AccTransactions { get; set; }        
+        public DbSet<AccountType> account_types { get; set; }
+        public DbSet<MembershipJoinType> membership_join_types { get; set; }    
+        public DbSet<JobInfo> job_infos { get; set; }   
+        public DbSet<Account> accounts { get; set; }    
+        public DbSet<UserRole> user_roles { get; set; }
+        public DbSet<User> users { get; set; }
+        public DbSet<ClientPeriodicCheckUp> client_periodic_checkups { get; set; }  
+        public DbSet<Product> product { get; set; }
+        public DbSet<ProductCodingInfo> product_coding_infos { get; set; }  
+        public DbSet<SaleInvoiceHeader> sale_invoice_headers { get; set; }  
+        public DbSet<SaleInvoiceDetails> sale_invoice_details { get; set; } 
+        public DbSet<SaleInvoicePayment> sale_invoice_payments { get; set; }    
+        public DbSet<SaleInvoicePaymentType> sale_invoice_payment_types { get; set; }
+        public DbSet<AccTransaction> acc_transactions { get; set; }         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {           
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.UserName)
+                .HasIndex(u => u.user_name)
                 .IsUnique();
 
-            modelBuilder.Entity<ClientPeriodicCheckUp>().Property(e => e.CreateDate)
+            modelBuilder.Entity<ClientPeriodicCheckUp>().Property(e => e.create_date)
                 .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("NOW()")
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<ProductMain>().Property(e => e.CreateDate)
+            modelBuilder.Entity<Product>().Property(e => e.create_date)
                 .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("NOW()")
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<ProductCodingInfo>().Property(e => e.CreateDate)
+            modelBuilder.Entity<ProductCodingInfo>().Property(e => e.create_date)
                 .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("NOW()")
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<SaleInvoiceHeader>().Property(e => e.CreateDate)
+            modelBuilder.Entity<SaleInvoiceHeader>().Property(e => e.create_date)
                 .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("NOW()")
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<SaleInvoiceDetails>().Property(e => e.CreateDate)
+            modelBuilder.Entity<SaleInvoiceDetails>().Property(e => e.create_date)
                 .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("NOW()")
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<AccTransaction>().Property(e => e.CreateDate)
+            modelBuilder.Entity<AccTransaction>().Property(e => e.create_date)
                 .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("NOW()")
                 .ValueGeneratedOnAdd();

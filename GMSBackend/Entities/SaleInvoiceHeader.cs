@@ -9,31 +9,31 @@ namespace GMSBackend.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long ID { get; set; }
+        public long id { get; set; }
 
-        public DateTime InvDate { get; set; }
+        public DateTime inv_date { get; set; }
 
-        public long AccountID { get; set; }
+        public long account_id { get; set; }
 
-        [ForeignKey("AccountID")] 
-        public Account Account { get; set; }    
+        [ForeignKey("account_id")] 
+        public Account account { get; set; }    
 
-        public long? VisitorID { get; set; }
+        public long? visitor_id { get; set; }
 
-        public short InvType { get; set; }
+        public short inv_type { get; set; }
 
-        public double? Price { get; set; }
+        public double? price { get; set; }
 
-        public double? Reduction { get; set; }
+        public double? reduction { get; set; }
 
-        public string Memo { get; set; }    
+        public string memo { get; set; }    
 
-        public DateTime CreateDate { get; set; }
+        public DateTime create_date { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool is_deleted { get; set; }
 
-        public List<SaleInvoiceDetails> SaleInvoiceDetails { get; set; }
+        public List<SaleInvoiceDetails> sale_invoice_details { get; set; }
 
-        public List<SaleInvoicePayment> SaleInvoicePayments { get; set; }       
+        public List<SaleInvoicePayment> sale_invoice_payments { get; set; }         
     }
 }

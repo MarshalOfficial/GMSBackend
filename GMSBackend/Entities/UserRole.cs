@@ -7,11 +7,11 @@ namespace GMSBackend.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int id { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string Title { get; set; }
+        public string title { get; set; }
 
         //public const string Admin = nameof(Admin);
         //public const string BasicUser = nameof(BasicUser);

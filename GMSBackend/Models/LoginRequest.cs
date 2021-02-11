@@ -6,11 +6,9 @@ namespace GMSBackend.Models
     public class LoginRequest
     {
         [Required]
-        [JsonPropertyName("username")]
-        public string UserName { get; set; }
+        public string user_name { get; set; }
 
         [Required]
-        [JsonPropertyName("password")]
-        public string Password { get; set; }
+        public string password { get; set; }
     }
 }

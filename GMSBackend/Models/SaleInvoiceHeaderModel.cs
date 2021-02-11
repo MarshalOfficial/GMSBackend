@@ -5,11 +5,11 @@ namespace GMSBackend.Models
 {
     public class SaleInvoiceHeaderModel : SaleInvoiceHeader
     {
-        public string InvDateFa
+        public string inv_date_fa   
         {
             get
             {
-                var str = new PersianDateTime(InvDate);
+                var str = new PersianDateTime(inv_date);
                 return str.ToString();
             }
         }
