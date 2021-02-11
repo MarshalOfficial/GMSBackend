@@ -125,7 +125,7 @@ namespace GMSBackend.Controllers
             }
         }
 
-        [HttpGet("getCustomers_paginate")]
+        [HttpGet("getCustomerspaginate")]
         public async Task<ActionResult> GetCustomersPaginate(string first_name, string last_name, string mobile,int page=1,int pagesize=10)
         {
             try

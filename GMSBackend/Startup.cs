@@ -111,6 +111,8 @@ namespace GMSBackend
             //app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GMSBackend v1"));
+            app.UseDeveloperExceptionPage();
+
 
             app.UseRouting();
             app.UseCors("AllowAll");
