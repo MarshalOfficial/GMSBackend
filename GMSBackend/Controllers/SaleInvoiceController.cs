@@ -82,7 +82,7 @@ namespace GMSBackend.Controllers
 
 
         [HttpGet("getSaleInvoices")]
-        public async Task<ActionResult> GetSaleInvoices(long customer_id,string mobile,string from_date,string to_date)   
+        public async Task<ActionResult> GetSaleInvoices(long customer_id,string mobile,string from_date,string to_date, int page = 1, int pagesize = 10)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace GMSBackend.Controllers
                 }
 
                 var query = $@"
-                                select h.*,a.title as account_title, a.first_name, a.last_name,d.product_id, d.product_name, 
+                                select count(1) OVER() AS row_count,h.*,a.title as account_title, a.first_name, a.last_name,d.product_id, d.product_name, 
                                  d.qty, d.price as product_price, d.reduction_percent, d.reduction_price, d.session_qty, 
                                  d.session_reserved, d.session_used,p.sale_invoice_payment_type_id, p.price aS payment_price, 
                                  p.description,pt.title as payment_type_title 
@@ -104,7 +104,10 @@ namespace GMSBackend.Controllers
                                  + (!string.IsNullOrWhiteSpace(mobile) ? $"and a.mobile like '%{mobile}%'" : string.Empty)
                                  + (customer_id > 0 ? $"and a.id = {customer_id}" : string.Empty)
                                  + (!string.IsNullOrWhiteSpace(from_date) ? $"and h.create_date >= '{from_date.ToDateTimeStr()}'" : string.Empty)
-                                 + (!string.IsNullOrWhiteSpace(to_date) ? $"and h.create_date <= '{to_date.ToDateTimeStr()}'" : string.Empty);
+                                 + (!string.IsNullOrWhiteSpace(to_date) ? $"and h.create_date <= '{to_date.ToDateTimeStr()}'" : string.Empty)
+                                 + @$"ORDER BY id 
+                                   LIMIT {pagesize}
+                                   OFFSET({pagesize}*({page}-1)) ";
                                                 
                 var lst = await _dBDapperRepository.RunQueryAsync<SaleInvoiceReportModel>(query);               
                 return Ok(new CoreResponse() { is_success = true, data = lst });
