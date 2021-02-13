@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MD.PersianDateTime.Standard;
+using System;
 using System.Linq;
 
 namespace GMSBackend.Framework
@@ -24,5 +25,32 @@ namespace GMSBackend.Framework
 
             return result;
         }
+
+
+        public static DateTime ToDateTime(this string persiandatestr)
+        {
+            try
+            {
+                return PersianDateTime.Parse(persiandatestr, "/").ToDateTime();
+            }
+            catch
+            {
+                return DateTime.Now;
+            }
+            
+        }
+
+        public static string ToDateTimeStr(this string persiandatestr)
+        {
+            try
+            {
+                return PersianDateTime.Parse(persiandatestr, "/").ToDateTime().ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            catch
+            {
+                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+        }
+                
     }
 }

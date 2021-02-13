@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using GMSBackend.Entities;
+using GMSBackend.Framework;
 using GMSBackend.Models;
 using GMSBackend.Services;
+using MD.PersianDateTime.Standard;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -80,7 +82,7 @@ namespace GMSBackend.Controllers
 
 
         [HttpGet("getSaleInvoices")]
-        public async Task<ActionResult> GetSaleInvoices()   
+        public async Task<ActionResult> GetSaleInvoices(long customer_id,string mobile,string from_date,string to_date)   
         {
             try
             {
@@ -98,8 +100,12 @@ namespace GMSBackend.Controllers
                                  left join public.sale_invoice_details d on h.id = d.invoice_id
                                  left join public.sale_invoice_payments p on h.id = p.invoice_id
                                  left join public.sale_invoice_payment_types pt on p.sale_invoice_payment_type_id = pt.id 
-                                 left join public.accounts a on h.account_id = a.Id where h.is_deleted = '0' and d.is_deleted = '0' ";
-                
+                                 left join public.accounts a on h.account_id = a.Id where h.is_deleted = '0' and d.is_deleted = '0' "
+                                 + (!string.IsNullOrWhiteSpace(mobile) ? $"and a.mobile like '%{mobile}%'" : string.Empty)
+                                 + (customer_id > 0 ? $"and a.id = {customer_id}" : string.Empty)
+                                 + (!string.IsNullOrWhiteSpace(from_date) ? $"and h.create_date >= '{from_date.ToDateTimeStr()}'" : string.Empty)
+                                 + (!string.IsNullOrWhiteSpace(to_date) ? $"and h.create_date <= '{to_date.ToDateTimeStr()}'" : string.Empty);
+                                                
                 var lst = await _dBDapperRepository.RunQueryAsync<SaleInvoiceReportModel>(query);               
                 return Ok(new CoreResponse() { is_success = true, data = lst });
             }
