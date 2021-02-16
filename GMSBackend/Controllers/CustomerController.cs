@@ -206,8 +206,8 @@ namespace GMSBackend.Controllers
             }
         }
 
-        [HttpPut("updateCustomer")]        
-        public async Task<ActionResult> UpdateCustomer([FromBody] Account customer) 
+        [HttpPut("updateCustomer")]
+        public async Task<ActionResult> UpdateCustomer([FromBody] AccountUpdateModel customer)
         {
             try
             {
@@ -222,12 +222,21 @@ namespace GMSBackend.Controllers
                     throw new Exception("there is no customer with this id that passed in.");
                 }
 
-                //todo functional below code with extension method
-                var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Account, Account>();
-                }));
-                mapper.Map(customer, cus);
+                cus.title = customer.title;
+                cus.first_name = customer.first_name;
+                cus.last_name = customer.last_name;
+                cus.birth_date = customer.birth_date;
+                cus.Gender = customer.Gender;
+                cus.mobile = customer.mobile;
+                cus.tel = customer.tel;
+                cus.postal_code = customer.postal_code;
+                cus.email = customer.email;
+                cus.telegram = customer.telegram;
+                cus.instagram = customer.instagram;
+                cus.address = customer.address;
+                cus.membership_join_type_id = customer.membership_join_type_id;
+                cus.jobinfo_id = customer.jobinfo_id;
+                cus.contract_file_path = customer.contract_file_path;
 
                 await _dBRepository.SaveChangesAsync();
 

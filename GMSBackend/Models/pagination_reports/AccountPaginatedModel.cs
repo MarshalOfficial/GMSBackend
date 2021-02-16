@@ -8,6 +8,8 @@ namespace GMSBackend.Models.pagination_reports
 {
     public class AccountPaginatedModel : Account
     {
-        public long row_count { get; set; } 
+        public long row_count { get; set; }
+
+        public string account_type_title { get; set; }  
     }
 }
