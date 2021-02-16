@@ -18,10 +18,12 @@ namespace GMSBackend.Controllers
     public class AccTransactionController : Controller
     {
         private DBRepository _dBRepository;
+        private DBDapperRepository _dBDapperRepository;
 
-        public AccTransactionController(DBRepository dBRepository)
+        public AccTransactionController(DBRepository dBRepository, DBDapperRepository dBDapperRepository)
         {
             _dBRepository = dBRepository;
+            _dBDapperRepository = dBDapperRepository;
         }
 
         [HttpPost("addAccTransaction")]
@@ -60,7 +62,7 @@ namespace GMSBackend.Controllers
                 await _dBRepository.acc_transactions.AddAsync(request);
                 await _dBRepository.SaveChangesAsync();
 
-                ///////////////todo update customer balance
+                await _dBDapperRepository.RunQueryScalar(@$"update accounts set balance = balance + {(request.is_variz ? request.price : (request.price * -1))} where id={request.account_id}");
 
                 return Ok(new CoreResponse() { is_success = true, data = request });
 

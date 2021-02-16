@@ -60,16 +60,16 @@ namespace GMSBackend.Controllers
                     account_id = request.account_id,
                     invoice_id = request.id,
                     account_type_id = 9,
-                    is_variz = true,
+                    is_variz = false,
                     price = request.sale_invoice_payments.Sum(l => l.price),
                     create_date = DateTime.Now,
                     description = "ثبت اتومات از فاکتور فروش"
                 };
-                
-                ///////////////todo update customer balance
-                
+                                                
                 await _dBRepository.acc_transactions.AddAsync(acctrans);
                 await _dBRepository.SaveChangesAsync();
+
+                await _dBDapperRepository.RunQueryScalar(@$"update accounts set balance = balance + {(acctrans.is_variz ? acctrans.price : (acctrans.price * -1))} where id={request.account_id}");
 
                 return Ok(new CoreResponse() { is_success = true, data = request });
 
