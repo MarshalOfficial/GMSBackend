@@ -141,8 +141,8 @@ namespace GMSBackend.Controllers
 
                 var lst = await _dBDapperRepository.RunQueryAsync<AccountPaginatedModel>(query);
 
-
-                return Ok(new CoreResponse() { is_success = true, data = lst });
+                return Ok(new CoreResponse() { is_success = true, data = lst, total_items = lst.First()?.row_count, current_page = page, total_pages = (lst.First()?.row_count / pagesize) + 1 });
+                //return Ok(new CoreResponse() { is_success = true, data = lst });
 
             }
             catch (Exception ex)
