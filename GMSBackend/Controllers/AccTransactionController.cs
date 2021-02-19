@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GMSBackend.Entities;
+using GMSBackend.Framework;
 using GMSBackend.Models;
 using GMSBackend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -102,7 +103,7 @@ namespace GMSBackend.Controllers
         }
 
         [HttpGet("getAccTransactions")]
-        public async Task<ActionResult> GetAccTransactions()
+        public async Task<ActionResult> GetAccTransactions(long account_id, int account_type_id, string title, string mobile, long invoice_id, string description, string from_date, string to_date, string user_name)
         {
             try
             {
@@ -111,17 +112,29 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var lst = await _dBRepository.acc_transactions.Where(l => l.is_deleted == false).Include(x => x.account).Include(p => p.account_type).AsNoTracking().ToListAsync();
+                var query = @$"
+                                select t.*,a.first_name,a.last_name,a.title,a.mobile,at.title as account_type_title,u.user_name
+                                from public.acc_transactions t
+                                join public.accounts a on t.account_id = a.id
+                                join public.account_types at on a.account_type_id = at.id
+                                left join public.users u on t.user_id = u.id
+                                    where t.is_deleted='0' "
+                                    + (!string.IsNullOrWhiteSpace(title) ? $" and (a.first_name like '%{title}%' or a.last_name like '%{title}%'or a.title like '%{title}%') " : string.Empty)
+                                    + (!string.IsNullOrWhiteSpace(mobile) ? $" and a.mobile like '%{mobile}%' " : string.Empty)
+                                    + (!string.IsNullOrWhiteSpace(description) ? $" and t.description like '%{description}%' " : string.Empty)
+                                    + (!string.IsNullOrWhiteSpace(user_name) ? $" and u.user_name like '%{user_name}%' " : string.Empty)
+                                    + (!string.IsNullOrWhiteSpace(from_date) ? $"and t.create_date >= '{from_date.ToDateTimeStr()}'" : string.Empty)
+                                    + (!string.IsNullOrWhiteSpace(to_date) ? $"and t.create_date <= '{to_date.ToDateTimeStr()}'" : string.Empty)
+                                    + (invoice_id > 0 ? $" and t.invoice_id = {invoice_id} " : string.Empty)
+                                    + (account_id > 0 ? $" and t.account_id= {account_id} " : string.Empty)
+                                    + (account_type_id > 0 ? $" and t.account_type_id= {account_type_id} " : string.Empty)
+                                    ;
 
-                var result = new List<AccTransactionViewModel>();
+                //var lst = await _dBRepository.acc_transactions.Where(l => l.is_deleted == false).Include(x => x.account).Include(p => p.account_type).AsNoTracking().ToListAsync();
 
-                var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<AccTransaction, AccTransactionViewModel>();
-                }));
-                mapper.Map(lst, result);
-
-                return Ok(new CoreResponse() { is_success = true, data = result });
+                var lst = await _dBDapperRepository.RunQueryAsync<AccTransactionViewModel>(query);
+                
+                return Ok(new CoreResponse() { is_success = true, data = lst });
 
             }
             catch (Exception ex)

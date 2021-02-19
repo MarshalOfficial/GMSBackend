@@ -14,12 +14,12 @@ namespace GMSBackend.Entities
 
         public int account_type_id { get; set; }    
 
-        [ForeignKey("AccountTypeID")]  
+        [ForeignKey("account_type_id")]  
         public AccountType account_type { get; set; }
 
         public long account_id { get; set; }
 
-        [ForeignKey("AccountID")]
+        [ForeignKey("account_id")]
         public Account account { get; set; }
 
         public decimal price { get; set; }

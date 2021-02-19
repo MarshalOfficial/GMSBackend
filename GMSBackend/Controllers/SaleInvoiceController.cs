@@ -83,7 +83,7 @@ namespace GMSBackend.Controllers
 
 
         [HttpGet("getSaleInvoicesPaginate")]
-        public async Task<ActionResult> GetSaleInvoicesPaginate(long customer_id,string mobile,string from_date,string to_date, int page = 1, int pagesize = 10)
+        public async Task<ActionResult> GetSaleInvoicesPaginate(long customer_id,string mobile,string from_date,string to_date, string first_name, string last_name, int page = 1, int pagesize = 10)
         {
             try
             {
@@ -106,6 +106,8 @@ namespace GMSBackend.Controllers
                                  + (customer_id > 0 ? $"and a.id = {customer_id}" : string.Empty)
                                  + (!string.IsNullOrWhiteSpace(from_date) ? $"and h.create_date >= '{from_date.ToDateTimeStr()}'" : string.Empty)
                                  + (!string.IsNullOrWhiteSpace(to_date) ? $"and h.create_date <= '{to_date.ToDateTimeStr()}'" : string.Empty)
+                                 + (!string.IsNullOrWhiteSpace(first_name) ? $"and a.first_name like '%{first_name}%'" : string.Empty)
+                                 + (!string.IsNullOrWhiteSpace(last_name) ? $"and a.last_name like '%{last_name}%'" : string.Empty)
                                  + @$"ORDER BY id 
                                    LIMIT {pagesize}
                                    OFFSET({pagesize}*({page}-1)) ";
@@ -120,7 +122,7 @@ namespace GMSBackend.Controllers
         }
 
         [HttpGet("getSaleInvoices")]
-        public async Task<ActionResult> GetSaleInvoices(long customer_id, string mobile, string from_date, string to_date)
+        public async Task<ActionResult> GetSaleInvoices(long customer_id, string mobile, string from_date, string to_date, string first_name, string last_name)
         {
             try
             {
@@ -142,7 +144,9 @@ namespace GMSBackend.Controllers
                                  + (!string.IsNullOrWhiteSpace(mobile) ? $"and a.mobile like '%{mobile}%'" : string.Empty)
                                  + (customer_id > 0 ? $"and a.id = {customer_id}" : string.Empty)
                                  + (!string.IsNullOrWhiteSpace(from_date) ? $"and h.create_date >= '{from_date.ToDateTimeStr()}'" : string.Empty)
-                                 + (!string.IsNullOrWhiteSpace(to_date) ? $"and h.create_date <= '{to_date.ToDateTimeStr()}'" : string.Empty);
+                                 + (!string.IsNullOrWhiteSpace(to_date) ? $"and h.create_date <= '{to_date.ToDateTimeStr()}'" : string.Empty)
+                                 + (!string.IsNullOrWhiteSpace(first_name) ? $"and a.first_name like '%{first_name}%'" : string.Empty)
+                                 + (!string.IsNullOrWhiteSpace(last_name) ? $"and a.last_name like '%{last_name}%'" : string.Empty);
 
                 var lst = await _dBDapperRepository.RunQueryAsync<SaleInvoiceReportModel>(query);
                 return Ok(new CoreResponse() { is_success = true, data = lst });
