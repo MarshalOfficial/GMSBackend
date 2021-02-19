@@ -56,6 +56,8 @@ namespace GMSBackend.Controllers
                 await _dBRepository.sale_invoice_headers.AddAsync(request);
                 await _dBRepository.SaveChangesAsync();
 
+                var user = await _dBRepository.users.FirstOrDefaultAsync(a => a.user_name.ToLower() == User.Identity.Name.ToLower());
+
                 var acctrans = new AccTransaction()
                 {
                     account_id = request.account_id,
@@ -64,7 +66,8 @@ namespace GMSBackend.Controllers
                     is_variz = false,
                     price = request.sale_invoice_payments.Sum(l => l.price),
                     create_date = DateTime.Now,
-                    description = "ثبت اتومات از فاکتور فروش"
+                    description = "ثبت اتومات از فاکتور فروش",
+                    user_id = (long)(user?.id)
                 };
                                                 
                 await _dBRepository.acc_transactions.AddAsync(acctrans);
