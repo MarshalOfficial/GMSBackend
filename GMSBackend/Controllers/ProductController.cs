@@ -149,6 +149,14 @@ namespace GMSBackend.Controllers
                 {
                     throw new Exception("there is no product with this id that passed in.");
                 }
+
+                var existSaleInv = await _dBRepository.sale_invoice_details.AnyAsync(a => a.product_id == obj.id && a.is_deleted == false);
+                if (existSaleInv)
+                {
+                    throw new Exception("there are some sale invoices for this product, so can no delete it.");
+                }
+
+
                 obj.is_deleted = true;
                 await _dBRepository.SaveChangesAsync();
 
