@@ -52,7 +52,7 @@ namespace GMSBackend.Controllers
         }
 
         [HttpGet("getProducts")]
-        public async Task<ActionResult> GetProducts()   
+        public async Task<ActionResult> GetProducts()
         {
             try
             {
@@ -74,7 +74,7 @@ namespace GMSBackend.Controllers
 
 
         [HttpGet("getProduct")]
-        public async Task<ActionResult> GetProduct(long ID) 
+        public async Task<ActionResult> GetProduct(long ID)
         {
             try
             {
@@ -94,8 +94,8 @@ namespace GMSBackend.Controllers
             }
         }
 
-        [HttpPut("updateProduct")]  
-        public async Task<ActionResult> UpdateProduct([FromBody] Product product)
+        [HttpPut("updateProduct")]
+        public async Task<ActionResult> UpdateProduct([FromBody] ProductUpdateModel product)
         {
             try
             {
@@ -110,12 +110,17 @@ namespace GMSBackend.Controllers
                     throw new Exception("there is no product with this id that passed in.");
                 }
 
-                //todo functional below code with extension method
-                var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Account, Account>();
-                }));
-                mapper.Map(product, obj);
+                obj.coding_id = product.coding_id;
+                obj.product_code = product.product_code;
+                obj.product_name = product.product_name;
+                obj.buy_price = product.buy_price;
+                obj.sale_price = product.sale_price;
+                obj.sale_price2 = product.sale_price2;
+                obj.product_barcode = product.product_barcode;
+                obj.session_count = product.session_count;
+                obj.start_date = product.start_date;
+                obj.end_date = product.end_date;
+                obj.is_active = product.is_active;
 
                 await _dBRepository.SaveChangesAsync();
 
@@ -126,7 +131,7 @@ namespace GMSBackend.Controllers
             {
                 return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
-        }
+        }    
 
 
         [HttpDelete("deleteProduct")]   
