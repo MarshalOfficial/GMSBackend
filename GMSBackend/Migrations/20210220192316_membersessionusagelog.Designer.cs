@@ -3,15 +3,17 @@ using System;
 using GMSBackend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GMSBackend.Migrations
 {
     [DbContext(typeof(DBRepository))]
-    partial class DBRepositoryModelSnapshot : ModelSnapshot
+    [Migration("20210220192316_membersessionusagelog")]
+    partial class membersessionusagelog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,7 +238,24 @@ namespace GMSBackend.Migrations
                     b.ToTable("client_periodic_checkups");
                 });
 
-            modelBuilder.Entity("GMSBackend.Entities.ClientSessionUsageLog", b =>
+            modelBuilder.Entity("GMSBackend.Entities.JobInfo", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("job_infos");
+                });
+
+            modelBuilder.Entity("GMSBackend.Entities.MemberSessionUsageLog", b =>
                 {
                     b.Property<long>("id")
                         .ValueGeneratedOnAdd()
@@ -258,9 +277,6 @@ namespace GMSBackend.Migrations
                     b.Property<bool>("is_deleted")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("qty")
-                        .HasColumnType("integer");
-
                     b.Property<long>("sale_invoice_details_id")
                         .HasColumnType("bigint");
 
@@ -270,24 +286,7 @@ namespace GMSBackend.Migrations
 
                     b.HasIndex("sale_invoice_details_id");
 
-                    b.ToTable("client_session_usage_log");
-                });
-
-            modelBuilder.Entity("GMSBackend.Entities.JobInfo", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("job_infos");
+                    b.ToTable("member_session_usage_log");
                 });
 
             modelBuilder.Entity("GMSBackend.Entities.MembershipJoinType", b =>
@@ -593,7 +592,7 @@ namespace GMSBackend.Migrations
                     b.Navigation("account_type");
                 });
 
-            modelBuilder.Entity("GMSBackend.Entities.ClientSessionUsageLog", b =>
+            modelBuilder.Entity("GMSBackend.Entities.MemberSessionUsageLog", b =>
                 {
                     b.HasOne("GMSBackend.Entities.Account", "account")
                         .WithMany()

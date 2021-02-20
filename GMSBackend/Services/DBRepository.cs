@@ -19,7 +19,8 @@ namespace GMSBackend.Services
         public DbSet<SaleInvoiceDetails> sale_invoice_details { get; set; } 
         public DbSet<SaleInvoicePayment> sale_invoice_payments { get; set; }    
         public DbSet<SaleInvoicePaymentType> sale_invoice_payment_types { get; set; }
-        public DbSet<AccTransaction> acc_transactions { get; set; }         
+        public DbSet<AccTransaction> acc_transactions { get; set; }
+        public DbSet<ClientSessionUsageLog> client_session_usage_log { get; set; }      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {           
@@ -53,6 +54,11 @@ namespace GMSBackend.Services
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<AccTransaction>().Property(e => e.create_date)
+                .HasColumnType("timestamp with time zone")
+                .HasDefaultValueSql("NOW()")
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<ClientSessionUsageLog>().Property(e => e.create_date)
                 .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("NOW()")
                 .ValueGeneratedOnAdd();
