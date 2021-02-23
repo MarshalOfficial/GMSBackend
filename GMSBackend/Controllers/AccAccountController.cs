@@ -179,7 +179,7 @@ namespace GMSBackend.Controllers
                                 and mobile like '%{mobile}%'
                                 and a.title like '%{title}%'";
 
-                var lst = await _dBDapperRepository.RunQueryAsync<Account>(query); //await _dBRepository.accounts.Where(l => l.account_type_id == 1).AsNoTracking().ToListAsync();
+                var lst = await _dBDapperRepository.RunQueryAsync<AccountPaginatedModel>(query); //await _dBRepository.accounts.Where(l => l.account_type_id == 1).AsNoTracking().ToListAsync();
 
                 return Ok(new CoreResponse() { is_success = true, data = lst });
 
