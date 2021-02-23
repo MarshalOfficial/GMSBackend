@@ -38,6 +38,19 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
+                if (string.IsNullOrWhiteSpace(request.first_name))
+                {
+                    throw new Exception("first name is required");
+                }
+                if (string.IsNullOrWhiteSpace(request.last_name))
+                {
+                    throw new Exception("last name is required");
+                }
+                if (string.IsNullOrWhiteSpace(request.mobile))
+                {
+                    throw new Exception("mobile is required");
+                }
+
                 request.create_date = DateTime.Now;
                 request.join_date = DateTime.Now;
                 request.account_type_id = 1; 

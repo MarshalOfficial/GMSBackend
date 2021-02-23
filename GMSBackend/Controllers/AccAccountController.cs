@@ -37,6 +37,10 @@ namespace GMSBackend.Controllers
                 {
                     return BadRequest();
                 }
+                if (string.IsNullOrWhiteSpace(request.title))
+                {
+                    throw new Exception("first name is required");
+                }
 
                 request.create_date = DateTime.Now;
                 request.join_date = DateTime.Now;
@@ -84,12 +88,17 @@ namespace GMSBackend.Controllers
                 {
                     return BadRequest();
                 }
+                if (string.IsNullOrWhiteSpace(account.title))
+                {
+                    throw new Exception("first name is required");
+                }
 
                 var cus = await _dBRepository.accounts.Where(l => l.id == account.id).FirstOrDefaultAsync();
                 if (cus == null)
                 {
                     throw new Exception("there is no account with this id that passed in.");
                 }
+
 
                 cus.title = account.title;
                 cus.first_name = account.first_name;

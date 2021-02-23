@@ -14,11 +14,11 @@ namespace GMSBackend.Entities
 
         public string title { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(100)]
         public string first_name { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(100)]
         public string last_name { get; set; }
 
@@ -28,7 +28,7 @@ namespace GMSBackend.Entities
 
         public DateTime create_date { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(100)]
         public string mobile { get; set; }
 
