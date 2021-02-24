@@ -30,10 +30,6 @@ namespace GMSBackend.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
 
                 var query = $@" 
                                 select h.id as invoice_id,d.id as sale_invoice_details_id,h.create_date as invoice_date,d.product_name,d.session_qty,d.session_used,(d.session_qty - d.session_used) > 0 as can_use
@@ -57,42 +53,38 @@ namespace GMSBackend.Controllers
 
 
         [HttpPost("add_client_session_usage")]
-        public async Task<ActionResult> AddClientSessionUsage(long customer_id, long sale_invoice_details_id, string description, bool is_use)
+        public async Task<ActionResult> AddClientSessionUsage([FromBody] ClientSessionUsageModel request)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
 
-                var detail = await _dBRepository.sale_invoice_details.AsNoTracking().FirstOrDefaultAsync(a => a.id == sale_invoice_details_id);
-                if(detail == null)
+                var detail = await _dBRepository.sale_invoice_details.AsNoTracking().FirstOrDefaultAsync(a => a.id == request.sale_invoice_details_id);
+                if (detail == null)
                 {
                     throw new Exception("there is no sale invoice detail with this id [sale_invoice_details_id]");
                 }
 
-                if(detail.session_qty - detail.session_used <= 0)
+                if (detail.session_qty - detail.session_used <= 0)
                 {
                     throw new Exception($"this customer already has been used all sessions for this sale detail");
                 }
 
-                if(!is_use && detail.session_used == 0)
+                if (!request.is_use && detail.session_used == 0)
                 {
                     throw new Exception("session used for this sale invoice detail row is already 0 so it can not lead to negative value");
                 }
 
-                var customer = await _dBRepository.accounts.AsNoTracking().FirstOrDefaultAsync(a => a.id == customer_id);
-                if(customer == null)
+                var customer = await _dBRepository.accounts.AsNoTracking().FirstOrDefaultAsync(a => a.id == request.customer_id);
+                if (customer == null)
                 {
                     throw new Exception("there is no account with this id [customer_id]");
                 }
 
-                var obj = new ClientSessionUsageLog { account_id = customer_id, create_date = DateTime.Now, description = description, is_deleted = false, sale_invoice_details_id = sale_invoice_details_id, qty = (is_use ? 1 : -1) };
+                var obj = new ClientSessionUsageLog { account_id = request.customer_id, create_date = DateTime.Now, description = request.description, is_deleted = false, sale_invoice_details_id = request.sale_invoice_details_id, qty = (request.is_use ? 1 : -1) };
                 await _dBRepository.client_session_usage_log.AddAsync(obj);
                 await _dBRepository.SaveChangesAsync();
 
-                await UpdateSaleInvoiceDetailSessionUsage(customer_id, sale_invoice_details_id);
+                await UpdateSaleInvoiceDetailSessionUsage(request.customer_id, request.sale_invoice_details_id);
 
                 return Ok(new CoreResponse() { is_success = true, data = obj });
 
