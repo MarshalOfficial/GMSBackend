@@ -139,12 +139,12 @@ namespace GMSBackend.Controllers
                 var query = $@" select count(1) OVER() AS row_count,a.*,at.title as account_type_title
                                 from public.accounts a 
                                 join public.account_types at on a.account_type_id = at.id
-                                where account_type_id != 1
-                                and first_name like '%{first_name}%'
-                                and last_name like '%{last_name}%'
-                                and mobile like '%{mobile}%'
-                                and a.title like '%{title}%'
-                                ORDER BY id 
+                                where account_type_id != 1 " +
+                                (!string.IsNullOrWhiteSpace(first_name) ? $"and first_name like '%{first_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(last_name) ? $"and last_name like '%{last_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(mobile) ? $"and mobile like '%{mobile}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(title) ? $"and a.title like '%{title}%' " : string.Empty) +
+                                @$"ORDER BY id 
                                 LIMIT {pagesize} 
                                 OFFSET ({pagesize} * ({page}-1)) ";
 
@@ -173,12 +173,12 @@ namespace GMSBackend.Controllers
                 var query = $@"select a.*,at.title as account_type_title
                                 from public.accounts a 
                                 join public.account_types at on a.account_type_id = at.id
-                                where account_type_id != 1
-                                and first_name like '%{first_name}%'
-                                and last_name like '%{last_name}%'
-                                and mobile like '%{mobile}%'
-                                and a.title like '%{title}%'";
-
+                                where account_type_id != 1 " +
+                                (!string.IsNullOrWhiteSpace(first_name) ? $"and first_name like '%{first_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(last_name) ? $"and last_name like '%{last_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(mobile) ? $"and mobile like '%{mobile}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(title) ? $"and a.title like '%{title}%' " : string.Empty);
+                                
                 var lst = await _dBDapperRepository.RunQueryAsync<AccountPaginatedModel>(query); //await _dBRepository.accounts.Where(l => l.account_type_id == 1).AsNoTracking().ToListAsync();
 
                 return Ok(new CoreResponse() { is_success = true, data = lst });
