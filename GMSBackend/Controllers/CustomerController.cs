@@ -50,6 +50,10 @@ namespace GMSBackend.Controllers
                 {
                     throw new Exception("mobile is required");
                 }
+                if(await _dBRepository.accounts.AnyAsync(a=>a.mobile == request.mobile))
+                {
+                    throw new Exception($"there is already a customer with this mobile = {request.mobile}");
+                }
 
                 request.create_date = DateTime.Now;
                 request.join_date = DateTime.Now;

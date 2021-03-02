@@ -27,7 +27,7 @@ namespace GMSBackend.Services
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.user_name)
                 .IsUnique();
-
+            
             modelBuilder.Entity<ClientPeriodicCheckUp>().Property(e => e.create_date)
                 .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("NOW()")

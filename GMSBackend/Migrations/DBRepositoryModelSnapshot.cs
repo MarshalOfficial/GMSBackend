@@ -148,6 +148,9 @@ namespace GMSBackend.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("mobile")
+                        .IsUnique();
+
                     b.ToTable("accounts");
                 });
 
