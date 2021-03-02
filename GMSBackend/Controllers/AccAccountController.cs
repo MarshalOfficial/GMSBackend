@@ -127,7 +127,7 @@ namespace GMSBackend.Controllers
         }
 
         [HttpGet("get_accounts_paginate")]
-        public async Task<ActionResult> GetAccountsPaginate(string first_name, string last_name, string title, string mobile, int page = 1, int pagesize = 10)  
+        public async Task<ActionResult> GetAccountsPaginate(string first_name, string last_name, string title, string mobile, int account_type_id, int page = 1, int pagesize = 10)  
         {
             try
             {
@@ -140,11 +140,12 @@ namespace GMSBackend.Controllers
                                 from public.accounts a 
                                 join public.account_types at on a.account_type_id = at.id
                                 where account_type_id != 1 " +
-                                (!string.IsNullOrWhiteSpace(first_name) ? $"and first_name like '%{first_name}%' " : string.Empty) +
-                                (!string.IsNullOrWhiteSpace(last_name) ? $"and last_name like '%{last_name}%' " : string.Empty) +
-                                (!string.IsNullOrWhiteSpace(mobile) ? $"and mobile like '%{mobile}%' " : string.Empty) +
-                                (!string.IsNullOrWhiteSpace(title) ? $"and a.title like '%{title}%' " : string.Empty) +
-                                @$"ORDER BY id 
+                                (!string.IsNullOrWhiteSpace(first_name) ? $" and first_name like '%{first_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(last_name) ? $" and last_name like '%{last_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(mobile) ? $" and mobile like '%{mobile}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(title) ? $" and a.title like '%{title}%' " : string.Empty) +
+                                (account_type_id > 0 ? $" and a.account_type_id = {account_type_id} " : string.Empty) +
+                                @$" ORDER BY id 
                                 LIMIT {pagesize} 
                                 OFFSET ({pagesize} * ({page}-1)) ";
 
@@ -161,7 +162,7 @@ namespace GMSBackend.Controllers
         }
 
         [HttpGet("get_accounts")]
-        public async Task<ActionResult> GetAccounts(string first_name, string last_name, string title, string mobile)
+        public async Task<ActionResult> GetAccounts(string first_name, string last_name, string title, string mobile, int account_type_id)
         {
             try
             {
@@ -174,10 +175,11 @@ namespace GMSBackend.Controllers
                                 from public.accounts a 
                                 join public.account_types at on a.account_type_id = at.id
                                 where account_type_id != 1 " +
-                                (!string.IsNullOrWhiteSpace(first_name) ? $"and first_name like '%{first_name}%' " : string.Empty) +
-                                (!string.IsNullOrWhiteSpace(last_name) ? $"and last_name like '%{last_name}%' " : string.Empty) +
-                                (!string.IsNullOrWhiteSpace(mobile) ? $"and mobile like '%{mobile}%' " : string.Empty) +
-                                (!string.IsNullOrWhiteSpace(title) ? $"and a.title like '%{title}%' " : string.Empty);
+                                (!string.IsNullOrWhiteSpace(first_name) ? $" and first_name like '%{first_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(last_name) ? $" and last_name like '%{last_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(mobile) ? $" and mobile like '%{mobile}%' " : string.Empty) +
+                                (account_type_id > 0 ? $" and a.account_type_id = {account_type_id} " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(title) ? $" and a.title like '%{title}%' " : string.Empty);
                                 
                 var lst = await _dBDapperRepository.RunQueryAsync<AccountPaginatedModel>(query); //await _dBRepository.accounts.Where(l => l.account_type_id == 1).AsNoTracking().ToListAsync();
 

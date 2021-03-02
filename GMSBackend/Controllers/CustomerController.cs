@@ -142,6 +142,35 @@ namespace GMSBackend.Controllers
             }
         }
 
+        [HttpGet("getCustomersfulltext")]
+        public async Task<ActionResult> GetCustomersFullText(string title)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var query = $@"select * from public.accounts
+                                where account_type_id = 1 and 
+                                (" +
+                                $"first_name like '%{title}%' " +
+                                $"or last_name like '%{title}%' " +
+                                $"or mobile like '%{title}%' " +
+                                $")";
+
+                var lst = await _dBDapperRepository.RunQueryAsync<AccountPaginatedModel>(query); 
+
+                return Ok(new CoreResponse() { is_success = true, data = lst });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
+            }
+        }
+
         [HttpGet("getCustomersCombo")]
         public async Task<ActionResult> GetCustomersCombo(string first_name, string last_name, string mobile)
         {
@@ -170,6 +199,36 @@ namespace GMSBackend.Controllers
             }
         }
 
+        [HttpGet("getCustomersCombofulltext")]
+        public async Task<ActionResult> GetCustomersComboFullText(string title)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var query = $@"select id,first_name,last_name,mobile 
+                                from public.accounts
+                                where account_type_id = 1  and
+                                (" +
+                                $"first_name like '%{title}%' " +
+                                $"or last_name like '%{title}%' " +
+                                $"or mobile like '%{title}%' " +
+                                $")";
+
+                var lst = await _dBDapperRepository.RunQueryAsync<CustomerComboModel>(query);
+
+                return Ok(new CoreResponse() { is_success = true, data = lst });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
+            }
+        }
+
         [HttpGet("getCustomerspaginate")]
         public async Task<ActionResult> GetCustomersPaginate(string first_name, string last_name, string mobile,int page=1,int pagesize=10)
         {
@@ -186,6 +245,41 @@ namespace GMSBackend.Controllers
                                 (!string.IsNullOrWhiteSpace(first_name) ? $"and first_name like '%{first_name}%' " : string.Empty) +
                                 (!string.IsNullOrWhiteSpace(last_name) ? $"and last_name like '%{last_name}%' " : string.Empty) +
                                 (!string.IsNullOrWhiteSpace(mobile) ? $"and mobile like '%{mobile}%' " : string.Empty) +
+                                @$"ORDER BY id 
+                                LIMIT {pagesize} 
+                                OFFSET ({pagesize} * ({page}-1)) ";
+
+                var lst = await _dBDapperRepository.RunQueryAsync<AccountPaginatedModel>(query);
+
+
+                return Ok(new CoreResponse() { is_success = true, data = lst, total_items = lst.First()?.row_count, current_page = page, total_pages = (lst.First()?.row_count / pagesize) + 1 });
+                //return Ok(new CoreResponse() { is_success = true, data = lst });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
+            }
+        }
+
+        [HttpGet("getCustomerspaginatefulltext")]
+        public async Task<ActionResult> GetCustomersPaginateFullText(string title, int page = 1, int pagesize = 10)
+        {   
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var query = $@" select count(1) OVER() AS row_count,* 
+                                from public.accounts
+                                where account_type_id = 1 and
+                                (" +
+                                $"first_name like '%{title}%' " +
+                                $"or last_name like '%{title}%' " +
+                                $"or mobile like '%{title}%' " +
+                                $")" +
                                 @$"ORDER BY id 
                                 LIMIT {pagesize} 
                                 OFFSET ({pagesize} * ({page}-1)) ";
