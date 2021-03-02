@@ -126,12 +126,12 @@ namespace GMSBackend.Controllers
                 }
 
                 var query = $@"select * from public.accounts
-                                where account_type_id = 1
-                                and first_name like '%{first_name}%'
-                                and last_name like '%{last_name}%'
-                                and mobile like '%{mobile}%'  ";
+                                where account_type_id = 1 " +
+                                (!string.IsNullOrWhiteSpace(first_name) ? $"and first_name like '%{first_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(last_name) ? $"and last_name like '%{last_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(mobile) ? $"and mobile like '%{mobile}%' " : string.Empty);
 
-                var lst = await _dBDapperRepository.RunQueryAsync<Account>(query); //await _dBRepository.accounts.Where(l => l.account_type_id == 1).AsNoTracking().ToListAsync();
+                var lst = await _dBDapperRepository.RunQueryAsync<AccountPaginatedModel>(query); //await _dBRepository.accounts.Where(l => l.account_type_id == 1).AsNoTracking().ToListAsync();
 
                 return Ok(new CoreResponse() { is_success = true, data = lst });
 
@@ -152,13 +152,14 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var query = $@"select first_name,last_name,mobile from public.accounts
-                                where account_type_id = 1
-                                and first_name like '%{first_name}%'
-                                and last_name like '%{last_name}%'
-                                and mobile like '%{mobile}%'  ";
+                var query = $@"select id,first_name,last_name,mobile 
+                                from public.accounts
+                                where account_type_id = 1 " +
+                                (!string.IsNullOrWhiteSpace(first_name) ? $"and first_name like '%{first_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(last_name) ? $"and last_name like '%{last_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(mobile) ? $"and mobile like '%{mobile}%' " : string.Empty);
 
-                var lst = await _dBDapperRepository.RunQueryAsync<CustomerComboModel>(query); 
+                var lst = await _dBDapperRepository.RunQueryAsync<CustomerComboModel>(query);
 
                 return Ok(new CoreResponse() { is_success = true, data = lst });
 
@@ -181,11 +182,11 @@ namespace GMSBackend.Controllers
 
                 var query = $@" select count(1) OVER() AS row_count,* 
                                 from public.accounts
-                                where account_type_id = 1
-                                and first_name like '%{first_name}%'
-                                and last_name like '%{last_name}%'
-                                and mobile like '%{mobile}%'
-                                ORDER BY id 
+                                where account_type_id = 1 " +
+                                (!string.IsNullOrWhiteSpace(first_name) ? $"and first_name like '%{first_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(last_name) ? $"and last_name like '%{last_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(mobile) ? $"and mobile like '%{mobile}%' " : string.Empty) +
+                                @$"ORDER BY id 
                                 LIMIT {pagesize} 
                                 OFFSET ({pagesize} * ({page}-1)) ";
 
@@ -213,7 +214,8 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var cus = await _dBRepository.accounts.Where(l => l.id == ID).AsNoTracking().FirstOrDefaultAsync();
+                var cus = await _dBDapperRepository.RunQueryAsync<AccountPaginatedModel>($"select * from public.accounts where id = {ID}");
+                    //_dBRepository.accounts.Where(l => l.id == ID).AsNoTracking().FirstOrDefaultAsync();
 
                 return Ok(new CoreResponse() { is_success = true, data = cus });
                 
