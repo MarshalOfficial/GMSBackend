@@ -19,5 +19,7 @@ namespace GMSBackend.Models
         public DateTime create_date { get; set; }
 
         public bool is_deleted { get; set; }
+
+        public long? invoice_id { get; set; }
     }
 }
