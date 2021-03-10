@@ -37,7 +37,7 @@ namespace GMSBackend.Framework
             {
                 return DateTime.Now;
             }
-            
+
         }
 
         public static string ToDateTimeStr(this string persiandatestr)
@@ -51,6 +51,19 @@ namespace GMSBackend.Framework
                 return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             }
         }
-                
+
+
+        public static decimal ToDeciaml(this object obj)
+        {
+            try
+            {
+                return decimal.Parse(obj.ToString());
+            }
+            catch
+            {
+                return 0;
+            }
+
+        }
     }
 }

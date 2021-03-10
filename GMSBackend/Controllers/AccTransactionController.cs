@@ -53,17 +53,19 @@ namespace GMSBackend.Controllers
                 if (request.price == 0)
                     throw new Exception("امکان ثبت تراکنش با مبلغ 0 وجود ندارد");
 
-                if (request.account_type_id == 0)
-                    throw new Exception("نوع حساب را مشخص کنید");
-
                 if (request.account_id == 0)
                     throw new Exception("حساب مدنظر را انتخاب کنید");
 
+                if (request.invoice_id.HasValue && request.invoice_id > 0)
+                    request.account_type_id = 1;
+                else if (request.account_type_id == 0)
+                    throw new Exception("نوع حساب را مشخص کنید");
+
+                request.price = (request.is_variz ? (request.price) : (request.price * -1));
 
                 await _dBRepository.acc_transactions.AddAsync(request);
                 await _dBRepository.SaveChangesAsync();
-
-                await _dBDapperRepository.RunQueryScalar(@$"update accounts set balance = balance + {(request.is_variz ? request.price : (request.price * -1))} where id={request.account_id}");
+                
 
                 return Ok(new CoreResponse() { is_success = true, data = request });
 

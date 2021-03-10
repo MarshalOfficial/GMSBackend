@@ -6,7 +6,7 @@ namespace GMSBackend.Models
     {
         public bool is_variz { get; set; }
 
-        public int account_type_id { get; set; }
+        public int? account_type_id { get; set; }
         
         public long account_id { get; set; }
         

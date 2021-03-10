@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Npgsql;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GMSBackend.Services
@@ -24,6 +25,19 @@ namespace GMSBackend.Services
 
             }
             return value;
+        }
+
+
+        public async Task<T> RunQueryScalar<T>(string query)
+        {
+            T value;
+            using (npgsqlConnection = new NpgsqlConnection(_connectionString))
+            {
+                await npgsqlConnection.OpenAsync();
+                value = await npgsqlConnection.QueryFirstAsync<T>(query);
+
+            }
+            return value;    
         }
 
 
