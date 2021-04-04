@@ -60,7 +60,9 @@ namespace GMSBackend.Entities
 
         public string contract_file_path { get; set; }
 
-        public decimal balance { get; set; }    
+        public decimal balance { get; set; }
+
+        public bool? default_income_acc { get; set; }   
 
     }   
 }
