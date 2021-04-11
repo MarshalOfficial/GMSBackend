@@ -64,5 +64,12 @@ namespace GMSBackend.Services
             }
             return value;
         }
+
+
+        public async Task<long> GetSanadNum()
+        {
+            var num = await RunQueryScalar<long>("select get_sanad_num()");
+            return num;
+        }
     }
 }

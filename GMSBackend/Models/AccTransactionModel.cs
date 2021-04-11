@@ -4,7 +4,7 @@ namespace GMSBackend.Models
 {
     public class AccTransactionModel
     {
-        public bool is_variz { get; set; }
+        public bool is_daryaft { get; set; }    
 
         public int? account_type_id { get; set; }
         
@@ -21,5 +21,8 @@ namespace GMSBackend.Models
         public bool is_deleted { get; set; }
 
         public long? invoice_id { get; set; }
+
+        public long account_id_fromto { get; set; }
     }
 }
+        

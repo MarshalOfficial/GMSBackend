@@ -10,7 +10,9 @@ namespace GMSBackend.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long id { get; set; }
 
-        public bool is_variz { get; set; }   
+        //public bool is_variz { get; set; }   
+
+        public long? sanad_num { get; set; }    
 
         public int account_type_id { get; set; }    
 

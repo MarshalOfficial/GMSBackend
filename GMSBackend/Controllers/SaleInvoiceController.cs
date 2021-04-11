@@ -62,14 +62,14 @@ namespace GMSBackend.Controllers
                 {
                     account_id = request.account_id,
                     invoice_id = request.id,
-                    account_type_id = 9,
-                    is_variz = false,
-                    price = (request.price.ToDeciaml() - request.reduction.ToDeciaml()) * -1,
+                    account_type_id = 1,
+                    price = (request.price.ToDeciaml() - request.reduction.ToDeciaml()),
                     create_date = DateTime.Now,
                     description = "ثبت اتومات از فاکتور فروش",
                     user_id = (long)(user?.id)
                 };
-                                                
+                acctrans.sanad_num = await _dBDapperRepository.GetSanadNum();
+
                 await _dBRepository.acc_transactions.AddAsync(acctrans);
                 await _dBRepository.SaveChangesAsync();
                 
@@ -222,7 +222,7 @@ namespace GMSBackend.Controllers
                     return BadRequest();
                 }
 
-                var price = await _dBDapperRepository.RunQueryScalar<decimal>(@$"select abs(sum(COALESCE(price,0))) from public.acc_transactions where invoice_id={invoice_id}");
+                var price = await _dBDapperRepository.RunQueryScalar<decimal>(@$"select abs(sum(COALESCE(price,0))) from public.acc_transactions where invoice_id={invoice_id} and account_type_id = 1");
 
                 return Ok(new CoreResponse() { is_success = true, data = price });
 

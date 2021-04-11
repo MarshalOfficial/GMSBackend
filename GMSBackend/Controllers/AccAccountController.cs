@@ -192,5 +192,37 @@ namespace GMSBackend.Controllers
             }
         }
 
+
+        [HttpGet("get_accounts_all")]
+        public async Task<ActionResult> GetAccountsAll(string first_name, string last_name, string title, string mobile, int? account_type_id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var query = $@"select a.*,at.title as account_type_title
+                                from public.accounts a 
+                                join public.account_types at on a.account_type_id = at.id
+                                where 1=1 " +
+                                (!string.IsNullOrWhiteSpace(first_name) ? $" and first_name like '%{first_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(last_name) ? $" and last_name like '%{last_name}%' " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(mobile) ? $" and mobile like '%{mobile}%' " : string.Empty) +
+                                (account_type_id > 0 ? $" and a.account_type_id = {account_type_id} " : string.Empty) +
+                                (!string.IsNullOrWhiteSpace(title) ? $" and a.title like '%{title}%' " : string.Empty);
+
+                var lst = await _dBDapperRepository.RunQueryAsync<AccountPaginatedModel>(query); //await _dBRepository.accounts.Where(l => l.account_type_id == 1).AsNoTracking().ToListAsync();
+
+                return Ok(new CoreResponse() { is_success = true, data = lst });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
+            }
+        }
+
     }
 }

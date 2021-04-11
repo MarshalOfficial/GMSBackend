@@ -36,38 +36,61 @@ namespace GMSBackend.Controllers
                 {
                     return BadRequest();
                 }
-                var request = new AccTransaction();
 
-                var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<AccTransactionModel, AccTransaction>();
-                }));
-                mapper.Map(requestobj, request);
-
-                request.create_date = DateTime.Now;
-                request.is_deleted = false;
-
-                if (request.user_id == 0)
+                //validate
+                if (requestobj.user_id == 0)
                     throw new Exception("کاربر ثبت کننده مشخص نشده است");
 
-                if (request.price == 0)
+                if (requestobj.price == 0)
                     throw new Exception("امکان ثبت تراکنش با مبلغ 0 وجود ندارد");
 
-                if (request.account_id == 0)
-                    throw new Exception("حساب مدنظر را انتخاب کنید");
+                if (requestobj.account_id == 0)
+                    throw new Exception("حساب اصلی را انتخاب کنید");
 
-                if (request.invoice_id.HasValue && request.invoice_id > 0)
-                    request.account_type_id = 1;
-                else if (request.account_type_id == 0)
+                if (requestobj.account_id_fromto == 0)
+                    throw new Exception("حساب از/به را انتخاب کنید");
+
+                if (requestobj.invoice_id.HasValue && requestobj.invoice_id > 0)
+                    requestobj.account_type_id = 1;
+                else if (requestobj.account_type_id == 0)
                     throw new Exception("نوع حساب را مشخص کنید");
 
-                request.price = (request.is_variz ? (request.price) : (request.price * -1));
 
+                var sanadnum = await _dBDapperRepository.GetSanadNum();
+
+                var request = new AccTransaction
+                {
+                    create_date = DateTime.Now,
+                    is_deleted = false,
+                    user_id = requestobj.user_id,
+                    account_id = requestobj.account_id,
+                    description = requestobj.description,
+                    account_type_id = requestobj.account_type_id.Value,
+                    invoice_id = requestobj.invoice_id,
+                    price = requestobj.is_daryaft ? requestobj.price : (requestobj.price * -1),
+                    sanad_num = sanadnum
+                };                
                 await _dBRepository.acc_transactions.AddAsync(request);
-                await _dBRepository.SaveChangesAsync();
-                
 
-                return Ok(new CoreResponse() { is_success = true, data = request });
+                var accountfromto = await _dBRepository.accounts.AsNoTracking().FirstOrDefaultAsync(a => a.id == requestobj.account_id_fromto);
+                var request1 = new AccTransaction
+                {
+                    create_date = DateTime.Now,
+                    is_deleted = false,
+                    user_id = requestobj.user_id,
+                    account_id = requestobj.account_id_fromto,
+                    description = requestobj.description,
+                    account_type_id = accountfromto.account_type_id,
+                    invoice_id = requestobj.invoice_id,
+                    price = requestobj.is_daryaft ? (requestobj.price * -1) : requestobj.price,
+                    sanad_num = sanadnum
+                };
+                await _dBRepository.acc_transactions.AddAsync(request1);
+
+                await _dBRepository.SaveChangesAsync();
+
+
+                return Ok(new CoreResponse() { is_success = true, data = new List<AccTransaction>() { request, request1 } });
 
             }
             catch (Exception ex)

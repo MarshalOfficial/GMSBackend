@@ -3,15 +3,17 @@ using System;
 using GMSBackend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GMSBackend.Migrations
 {
     [DbContext(typeof(DBRepository))]
-    partial class DBRepositoryModelSnapshot : ModelSnapshot
+    [Migration("20210406144807_defaultincomeacc")]
+    partial class defaultincomeacc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,11 +51,11 @@ namespace GMSBackend.Migrations
                     b.Property<bool>("is_deleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("is_variz")
+                        .HasColumnType("boolean");
+
                     b.Property<decimal>("price")
                         .HasColumnType("numeric");
-
-                    b.Property<long?>("sanad_num")
-                        .HasColumnType("bigint");
 
                     b.Property<long>("user_id")
                         .HasColumnType("bigint");
