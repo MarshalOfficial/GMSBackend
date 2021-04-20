@@ -224,5 +224,36 @@ namespace GMSBackend.Controllers
             }
         }
 
+
+        [HttpGet("get_accounts_all_fulltext")]
+        public async Task<ActionResult> GetAccountsAllFullText(string title)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var query = $@"select a.*,at.title as account_type_title
+                                from public.accounts a 
+                                join public.account_types at on a.account_type_id = at.id
+                                where 1=1 and (" +
+                                $" first_name like '%{title}%' "+
+                                $" or last_name like '%{title}%' "+
+                                $" or mobile like '%{title}%' " +                                
+                                $" or a.title like '%{title}%' ) ";
+
+                var lst = await _dBDapperRepository.RunQueryAsync<AccountPaginatedModel>(query); 
+
+                return Ok(new CoreResponse() { is_success = true, data = lst });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
+            }
+        }
+
     }
 }

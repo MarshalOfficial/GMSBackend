@@ -57,6 +57,8 @@ namespace GMSBackend.Controllers
 
 
                 var sanadnum = await _dBDapperRepository.GetSanadNum();
+                
+                var accountmain = await _dBRepository.accounts.AsNoTracking().FirstOrDefaultAsync(a => a.id == requestobj.account_id);
 
                 var request = new AccTransaction
                 {
@@ -65,7 +67,7 @@ namespace GMSBackend.Controllers
                     user_id = requestobj.user_id,
                     account_id = requestobj.account_id,
                     description = requestobj.description,
-                    account_type_id = requestobj.account_type_id.Value,
+                    account_type_id = accountmain.account_type_id,
                     invoice_id = requestobj.invoice_id,
                     price = requestobj.is_daryaft ? requestobj.price : (requestobj.price * -1),
                     sanad_num = sanadnum
