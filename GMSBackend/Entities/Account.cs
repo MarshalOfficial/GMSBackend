@@ -24,7 +24,7 @@ namespace GMSBackend.Entities
 
         public DateTime? birth_date { get; set; }
 
-        public bool? Gender { get; set; }
+        public bool? gender { get; set; }
 
         public DateTime create_date { get; set; }
 
@@ -62,7 +62,9 @@ namespace GMSBackend.Entities
 
         public decimal balance { get; set; }
 
-        public bool? default_income_acc { get; set; }   
+        public bool? default_income_acc { get; set; }
+
+        public string rfid_barcode { get; set; }
 
     }   
 }

@@ -104,7 +104,7 @@ namespace GMSBackend.Controllers
                 cus.first_name = account.first_name;
                 cus.last_name = account.last_name;
                 cus.birth_date = account.birth_date;
-                cus.Gender = account.Gender;
+                cus.gender = account.Gender;
                 cus.mobile = account.mobile;
                 cus.tel = account.tel;
                 cus.postal_code = account.postal_code;

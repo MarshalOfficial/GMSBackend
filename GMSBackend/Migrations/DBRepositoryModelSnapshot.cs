@@ -74,9 +74,6 @@ namespace GMSBackend.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<bool?>("Gender")
-                        .HasColumnType("boolean");
-
                     b.Property<int>("account_type_id")
                         .HasColumnType("integer");
 
@@ -108,6 +105,9 @@ namespace GMSBackend.Migrations
                     b.Property<string>("full_name")
                         .HasColumnType("text");
 
+                    b.Property<bool?>("gender")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("instagram")
                         .HasColumnType("text");
 
@@ -136,6 +136,9 @@ namespace GMSBackend.Migrations
 
                     b.Property<long?>("referral")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("rfid_barcode")
+                        .HasColumnType("text");
 
                     b.Property<string>("tel")
                         .HasColumnType("text");

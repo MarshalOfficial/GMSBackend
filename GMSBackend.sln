@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMSBackend", "GMSBackend\GMSBackend.csproj", "{1ED89658-8FB7-48B6-BD38-FFA74E7AF358}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GMSBackend", "GMSBackend\GMSBackend.csproj", "{1ED89658-8FB7-48B6-BD38-FFA74E7AF358}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFFitClubRFID", "WPFFitClubRFID\WPFFitClubRFID.csproj", "{D8AE9CB4-32CD-4681-B358-B0E90B9EA85E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{1ED89658-8FB7-48B6-BD38-FFA74E7AF358}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ED89658-8FB7-48B6-BD38-FFA74E7AF358}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ED89658-8FB7-48B6-BD38-FFA74E7AF358}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8AE9CB4-32CD-4681-B358-B0E90B9EA85E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8AE9CB4-32CD-4681-B358-B0E90B9EA85E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8AE9CB4-32CD-4681-B358-B0E90B9EA85E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8AE9CB4-32CD-4681-B358-B0E90B9EA85E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

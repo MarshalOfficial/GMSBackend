@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GMSBackend.Controllers
@@ -95,6 +96,56 @@ namespace GMSBackend.Controllers
             }
         }
 
+        [HttpPost("add_client_session_usage_kiosk")]
+        public async Task<ActionResult> AddClientSessionUsageKiosk([FromBody] ClientSessionUsageModel request)
+        {
+            try
+            {
+                request.is_use = true;
+
+                var detail = await _dBRepository.sale_invoice_details.AsNoTracking().FirstOrDefaultAsync(a => a.id == request.sale_invoice_details_id);
+                if (detail == null)
+                {
+                    throw new Exception("there is no sale invoice detail with this id [sale_invoice_details_id]");
+                }
+
+                if (detail.session_qty - detail.session_used <= 0)
+                {
+                    throw new Exception($"this customer already has been used all sessions for this sale detail");
+                }
+
+                if (!request.is_use && detail.session_used == 0)
+                {
+                    throw new Exception("session used for this sale invoice detail row is already 0 so it can not lead to negative value");
+                }
+
+                var customer = await _dBRepository.accounts.AsNoTracking().FirstOrDefaultAsync(a => a.id == request.customer_id);
+                if (customer == null)
+                {
+                    throw new Exception("there is no account with this id [customer_id]");
+                }
+
+               // var lastlog = await _dBRepository.client_session_usage_log.AsNoTracking().Where(a => a.account_id == customer.id).OrderByDescending(a => a.create_date).FirstOrDefaultAsync();
+               // if(lastlog != null && (DateTime.Now - lastlog.create_date).TotalMinutes <= 15)
+               //{
+               //   throw new Exception("the last log is for less than 15 mins ago.");
+               // }
+
+
+                var obj = new ClientSessionUsageLog { account_id = request.customer_id, create_date = DateTime.Now, description = request.description, is_deleted = false, sale_invoice_details_id = request.sale_invoice_details_id, qty = (request.is_use ? 1 : -1) };
+                await _dBRepository.client_session_usage_log.AddAsync(obj);
+                await _dBRepository.SaveChangesAsync();
+
+                await UpdateSaleInvoiceDetailSessionUsage(request.customer_id, request.sale_invoice_details_id);
+
+                return Ok(new CoreResponse() { is_success = true, data = obj });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
+            }
+        }
 
 
         private async Task UpdateSaleInvoiceDetailSessionUsage(long customer_id, long sale_invoice_details_id)

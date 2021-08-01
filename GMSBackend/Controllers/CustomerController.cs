@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GMSBackend.Entities;
 using GMSBackend.Models;
+using GMSBackend.Models.dto;
 using GMSBackend.Models.pagination_reports;
 using GMSBackend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -340,7 +341,7 @@ namespace GMSBackend.Controllers
                 cus.first_name = customer.first_name;
                 cus.last_name = customer.last_name;
                 cus.birth_date = customer.birth_date;
-                cus.Gender = customer.Gender;
+                cus.gender = customer.Gender;
                 cus.mobile = customer.mobile;
                 cus.tel = customer.tel;
                 cus.postal_code = customer.postal_code;
@@ -451,7 +452,87 @@ namespace GMSBackend.Controllers
                 return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
             }
         }
-
         #endregion
+
+        [AllowAnonymous]
+        [HttpGet("rfid_seach_customer")]
+        public async Task<ActionResult> rfidsearchcustomers(string barcode)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(barcode))
+                    throw new Exception("بارکد را وارد نمایید");
+
+                var nullbarcode = await _dBRepository.accounts.AsNoTracking().Where(a=>a.account_type_id==1).FirstOrDefaultAsync(a => a.rfid_barcode == barcode);
+                if (nullbarcode == null)
+                {
+                    throw new Exception(" . برای این کارت مشتری ثبت نشده ");
+                }
+               // var detail = await _dBRepository.sale_invoice_details.AsNoTracking().FirstOrDefaultAsync(a => a.id  == result );
+                
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var query = $@"Select a.id customer_id,first_name, last_name, gender ,
+                                      d.id sale_invoice_details_log,d.session_qty,d.session_used
+                                from  public.accounts a
+                                left join public.sale_invoice_headers h on a.id = h.account_id
+                                left join public.sale_invoice_details d on h.id = d.invoice_id
+                                where rfid_barcode = '{barcode}'
+                                and d.session_qty - d.session_used > 0
+                                order by d.create_date desc
+                                limit 1";
+
+                var result = await _dBDapperRepository.RunQueryAsync<ClientSearchByRfidDTO>(query);
+
+                if (result == null || !result.Any())
+                    throw new Exception("جلسه فعالی ندارید");
+
+                var obj = result.First();
+                if(obj.session_qty - obj.session_used <= 0)
+                {
+                    throw new Exception("جلسات شما به اتمام رسیده است");
+                }
+
+                
+                return Ok(new CoreResponse() { is_success = true, data = result });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
+            }
+        }
+
+        [HttpPut("BarcodeUpdate")]
+        public async Task<ActionResult> barcodeubdate([FromBody] BarcodeUpdateModel bar)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var cus = await _dBRepository.accounts.Where(l => l.id == bar.id).FirstOrDefaultAsync();
+                if (cus == null)
+                {
+                    throw new Exception("there is no customer with this id that passed in.");
+                }
+
+                cus.rfid_barcode = bar.rfid_barcode;
+
+                await _dBRepository.SaveChangesAsync();
+
+                return Ok(new CoreResponse() { is_success = true, data = cus });
+
+            }
+            catch (Exception ex)
+            {
+
+                return Ok(new CoreResponse() { is_success = false, data = null, dev_message = ex.Message });
+            }
+        }
     }
 }

@@ -1,0 +1,25 @@
+﻿<Window x:Class="WPFFitClubRFID.SetBarcode" FocusManager.FocusedElement="{Binding ElementName=tbbarcode}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFFitClubRFID"
+        mc:Ignorable="d"
+        Title="SetBarcode" FontSize="20" Height="350" Width="500" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <StackPanel Margin="15">
+            <DockPanel Margin="10">
+                <TextBlock HorizontalAlignment="Left" Width="250" Name="tbid" Margin="0 10" />
+                <Label Margin="10" HorizontalAlignment="Right" FontSize="20">: کد مشتری</Label>
+            </DockPanel>
+            <DockPanel Margin="10">
+                <TextBox HorizontalAlignment="Left" Width="250" Name="tbbarcode" Margin="0 10" />
+                <Label Margin="10" HorizontalAlignment="Right" FontSize="20">: بارکد را وارد کنید</Label>
+            </DockPanel>
+            <DockPanel Margin="10 40" HorizontalAlignment="Right">
+                <Button Margin="10" Height="40" Width="100" Name="cancel" Click="cancel_Click" Background="Gray" BorderBrush="Gray">خروج</Button>
+                <Button Margin="10" Height="40" Width="100" Name="ok" Click="ok_Click" Background="Gray" BorderBrush="Gray">ثبت</Button>
+            </DockPanel>
+        </StackPanel>
+    </Grid>
+</Window>
