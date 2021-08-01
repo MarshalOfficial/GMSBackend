@@ -2,6 +2,7 @@
 using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace WPFFitClubRFID
             long id = Convert.ToInt64(tbid.Text);
             string barcode = tbbarcode.Text;
 
-            var Client = new RestClient("http://localhost:8585/");
+            var Client = new RestClient(ConfigurationManager.AppSettings["api"].ToString());
 
             var authentication = new JwtAuthenticator(act);
             Client.Authenticator = authentication;

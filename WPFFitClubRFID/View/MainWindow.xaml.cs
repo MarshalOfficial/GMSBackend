@@ -2,6 +2,7 @@
 using RestSharp;
 using RestSharp.Authenticators;
 using System;
+using System.Configuration;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -24,7 +25,7 @@ namespace WPFFitClubRFID
             string code = Barcode.Text;
             if (e.Key == System.Windows.Input.Key.Enter)
             {
-                var Client = new RestClient("http://localhost:8585/");
+                var Client = new RestClient(ConfigurationManager.AppSettings["api"].ToString());
 
                 var request = new RestRequest("api/Customer/rfid_seach_customer", Method.GET);
                 request.AddParameter("barcode", code , ParameterType.QueryString);

@@ -5,6 +5,7 @@ using RestSharp.Serialization.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace WPFFitClubRFID
         {
             var act = App.accesstoken;
 
-            var Client = new RestClient("http://localhost:8585/");
+            var Client = new RestClient(ConfigurationManager.AppSettings["api"].ToString());
 
             var authentication = new JwtAuthenticator(act);
             Client.Authenticator = authentication;
@@ -78,7 +79,7 @@ namespace WPFFitClubRFID
 
                 var act = App.accesstoken;
 
-                var Client = new RestClient("http://localhost:8585/");
+                var Client = new RestClient(ConfigurationManager.AppSettings["api"].ToString());
 
                 var authentication = new JwtAuthenticator(act);
                 Client.Authenticator = authentication;

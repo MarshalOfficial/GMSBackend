@@ -2,6 +2,7 @@
 using RestSharp.Serialization.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -39,7 +40,8 @@ namespace WPFFitClubRFID
             string Username = user.Text;
             string Password = pass.Password;
 
-            var Client = new RestClient("http://localhost:8585/");
+           
+            var Client = new RestClient(ConfigurationManager.AppSettings["api"].ToString());
 
             var request = new RestRequest("api/Account/login", Method.POST);
 
