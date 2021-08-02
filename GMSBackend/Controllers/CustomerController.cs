@@ -454,7 +454,6 @@ namespace GMSBackend.Controllers
         }
         #endregion
 
-        [AllowAnonymous]
         [HttpGet("rfid_seach_customer")]
         public async Task<ActionResult> rfidsearchcustomers(string barcode)
         {

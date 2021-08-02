@@ -27,6 +27,11 @@ namespace WPFFitClubRFID
             {
                 var Client = new RestClient(ConfigurationManager.AppSettings["api"].ToString());
 
+                var act = App.accesstoken;
+
+                var aut = new JwtAuthenticator(act);
+                Client.Authenticator = aut;
+
                 var request = new RestRequest("api/Customer/rfid_seach_customer", Method.GET);
                 request.AddParameter("barcode", code , ParameterType.QueryString);
 
@@ -38,7 +43,6 @@ namespace WPFFitClubRFID
                 {
                     long customerid = response.Data.data[0].customer_id;
                     long saleinvoicedetailsid = response.Data.data[0].sale_invoice_details_log;
-                    var act = App.accesstoken;
 
                     var authentication = new JwtAuthenticator(act);
                     Client.Authenticator = authentication;
