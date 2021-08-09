@@ -125,11 +125,11 @@ namespace GMSBackend.Controllers
                     throw new Exception("there is no account with this id [customer_id]");
                 }
 
-               // var lastlog = await _dBRepository.client_session_usage_log.AsNoTracking().Where(a => a.account_id == customer.id).OrderByDescending(a => a.create_date).FirstOrDefaultAsync();
-               // if(lastlog != null && (DateTime.Now - lastlog.create_date).TotalMinutes <= 15)
-               //{
-               //   throw new Exception("the last log is for less than 15 mins ago.");
-               // }
+                var lastlog = await _dBRepository.client_session_usage_log.AsNoTracking().Where(a => a.account_id == customer.id).OrderByDescending(a => a.create_date).FirstOrDefaultAsync();
+                if (lastlog != null && (DateTime.Now - lastlog.create_date).TotalMinutes <= 60)
+                {
+                    throw new Exception(" . شما به تازگی ورود خود را ثبت کرده اید ");
+                }
 
 
                 var obj = new ClientSessionUsageLog { account_id = request.customer_id, create_date = DateTime.Now, description = request.description, is_deleted = false, sale_invoice_details_id = request.sale_invoice_details_id, qty = (request.is_use ? 1 : -1) };
