@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFitClubRFID"
         mc:Ignorable="d"
-        Title="SetBarcode" FontSize="20" Height="350" Width="500" WindowStartupLocation="CenterScreen">
+        Title="SetBarcode" FontSize="20" Height="350" Width="500" WindowStartupLocation="CenterScreen" Icon="/Resources/fit.png">
     <Grid>
         <StackPanel Margin="15">
             <DockPanel Margin="10">
