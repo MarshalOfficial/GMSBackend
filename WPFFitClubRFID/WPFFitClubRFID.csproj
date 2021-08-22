@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\1.png" />
+    <None Remove="Resources\1628872307206.png" />
+    <None Remove="Resources\2.png" />
+    <None Remove="Resources\3.png" />
+    <None Remove="Resources\85.png" />
     <None Remove="Resources\fit.png" />
     <None Remove="Resources\logo.png" />
     <None Remove="Resources\logo2.png" />
@@ -25,6 +30,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\1.png" />
+    <Resource Include="Resources\1628872307206.png" />
+    <Resource Include="Resources\2.png" />
+    <Resource Include="Resources\3.png" />
+    <Resource Include="Resources\85.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\fit.png" />
   </ItemGroup>
 
